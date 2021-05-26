@@ -25,12 +25,12 @@ import {
 } from 'rxjs/operators';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import * as _ from 'lodash';
-import { StageService } from 'src/app/services/stage.service';
+import { DealsService } from 'src/app/services/deals.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { searchReg } from 'src/app/helper';
 
 interface Stage {
-  _id: string;
+  title: string;
   isNew?: boolean;
 }
 
@@ -60,10 +60,11 @@ export class InputStageComponent implements OnInit {
 
   filteredResults: ReplaySubject<Stage[]> = new ReplaySubject<Stage[]>(1);
 
-  constructor(private stageService: StageService) {
-    this.stageService.getAllStages();
-    this.stageService.stages$.subscribe((stages) => {
+  constructor(private dealsService: DealsService) {
+    this.dealsService.getStage();
+    this.dealsService.stages$.subscribe((stages) => {
       this.filteredResults.next(stages);
+      console.log('filter');
     });
   }
 
@@ -77,7 +78,7 @@ export class InputStageComponent implements OnInit {
         tap(() => (this.searching = true)),
         map((search) => {
           this.keyword = search;
-          return this.stageService.stages$;
+          return this.dealsService.stages$;
         })
       )
       .subscribe(
@@ -85,19 +86,19 @@ export class InputStageComponent implements OnInit {
           data.subscribe((stages) => {
             const selectedStages = [];
             this.selectedStages.forEach((e) => {
-              selectedStages.push({ _id: e });
+              selectedStages.push({ title: e });
             });
             const remained = _.difference(stages, this.selectedStages);
             const res = _.filter(remained, (e) => {
-              if (e._id != -1) {
-                return searchReg(e._id, this.keyword);
+              if (e.title != -1) {
+                return searchReg(e.title, this.keyword);
               }
             });
             this.searching = false;
             if (res.length) {
               this.filteredResults.next(res);
             } else if (this.keyword && !this.onlyFromSearch) {
-              this.filteredResults.next([{ _id: this.keyword, isNew: true }]);
+              this.filteredResults.next([{ title: this.keyword, isNew: true }]);
             }
           });
         },
@@ -124,7 +125,7 @@ export class InputStageComponent implements OnInit {
       return e === stage;
     });
     if (index === -1) {
-      this.selectedStages.push(stage._id);
+      this.selectedStages.push(stage.title);
     }
     this.inputFieldRef.nativeElement.value = '';
     this.optionsFocused = false;
@@ -149,12 +150,12 @@ export class InputStageComponent implements OnInit {
     if (this.optionsFocused || !event.value) {
       return;
     }
-    const stage: Stage = { _id: event.value };
+    const stage: Stage = { title: event.value };
     const index = _.findIndex(this.selectedStages, function (e) {
       return e === stage;
     });
     if (index === -1) {
-      this.selectedStages.push(stage._id);
+      this.selectedStages.push(stage.title);
     }
     this.inputField.closePanel();
     this.inputFieldRef.nativeElement.value = '';

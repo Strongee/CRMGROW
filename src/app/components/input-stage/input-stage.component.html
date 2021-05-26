@@ -33,10 +33,10 @@
         [autoActiveFirstOption]="onlyFromSearch"
       >
         <mat-option *ngFor="let item of filteredResults | async" [value]="item">
-          <div class="d-flex chip py-2" *ngIf="item._id">
+          <div class="d-flex chip py-2" *ngIf="item.title">
             <div class="info">
               <div class="f-3" *ngIf="item.isNew">Create new stage:</div>
-              <div class="f-4 fw-600">{{item._id === -1 ? "No stages" : item._id}}</div>
+              <div class="f-4 fw-600">{{item.title}}</div>
             </div>
           </div>
         </mat-option>
