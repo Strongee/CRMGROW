@@ -165,7 +165,7 @@
       <!-- Emailing Task Progressing Status -->
       <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
         <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
-          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
+          <a class="no-carot d-block position-relative">
             <i class="i-icon i-sent-mail bgc-blue d-block email-sending-icon"></i>
             <span class="badge email-badge">{{emailTasks.length}}</span>
           </a>
