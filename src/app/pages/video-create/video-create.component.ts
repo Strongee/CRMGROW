@@ -45,6 +45,7 @@ export class VideoCreateComponent
 
   vimeoVideoMetaSubscription: Subscription;
   youtubeVideoMetaSubscription: Subscription;
+  routeChangeSubscription: Subscription;
 
   uploading = false;
   uploadTimer: any;
@@ -109,14 +110,22 @@ export class VideoCreateComponent
   }
 
   ngOnInit(): void {
-    const mode = this.route.snapshot.params['mode'];
-    this.tabs.forEach((tab) => {
-      if (tab.id == mode) {
-        this.changeTab(tab);
-        this.saved = false;
-      }
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
+      const mode = params['mode'];
+      this.selectedTab = this.tabs.filter((tab) => tab.id == mode)[0];
+      this.currentFolder = params['folder'];
+      this.isStep = 1;
+      this.video = new Material();
+      this.image = new Material();
+      this.pdf = new Material();
+      this.videoUploader.cancelAll();
+      this.videoUploader.clearQueue();
+      this.pdfUploader.cancelAll();
+      this.pdfUploader.clearQueue();
+      this.imageUploader.cancelAll();
+      this.imageUploader.clearQueue();
+      this.saved = true;
     });
-    this.currentFolder = this.route.snapshot.params['folder'];
     this.videoUploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
       if (this.videoUploader.queue.length > 1) {
@@ -136,7 +145,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status === 200) {
           response = JSON.parse(response);
@@ -158,7 +166,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status === 200) {
           response = JSON.parse(response);
@@ -181,7 +188,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status == 200) {
           response = JSON.parse(response);
@@ -197,7 +203,6 @@ export class VideoCreateComponent
         this.toast.error("Image is uploaded. But the Image could't saved.");
       }
     };
-    window['confirmReload'] = true;
   }
 
   ngOnDestroy(): void {
@@ -205,24 +210,21 @@ export class VideoCreateComponent
       this.vimeoVideoMetaSubscription.unsubscribe();
     this.youtubeVideoMetaSubscription &&
       this.youtubeVideoMetaSubscription.unsubscribe();
-
-    window['confirmReload'] = false;
   }
 
   changeTab(tab: TabItem): void {
-    this.selectedTab = tab;
-    this.isStep = 1;
-    this.videoUploader.cancelAll();
-    this.videoUploader.clearQueue();
-    this.pdfUploader.cancelAll();
-    this.pdfUploader.clearQueue();
-    this.imageUploader.cancelAll();
-    this.imageUploader.clearQueue();
-    this.saved = false;
+    if (this.currentFolder) {
+      this.router.navigate([
+        `/materials/create/${tab.id}/${this.currentFolder}`
+      ]);
+    } else {
+      this.router.navigate([`/materials/create/${tab.id}`]);
+    }
   }
 
   uploadVideo(): void {
     this.isStep++;
+    this.saved = false;
   }
 
   saveDetail(): void {
@@ -302,7 +304,6 @@ export class VideoCreateComponent
         this.imageUploader.uploadAllFiles();
         break;
     }
-    window['confirmReload'] = true;
     this.uploadTimer = timer(0, 500);
     this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
       if (this.uploaded_time < 60) {
@@ -483,7 +484,6 @@ export class VideoCreateComponent
                 .catch((err) => {});
               this.video.type = 'video/';
               this.uploadVideo();
-              this.saved = false;
             })
             .catch((err) => {
               this.toast.warning(
@@ -511,7 +511,6 @@ export class VideoCreateComponent
           this.thumbnail_loading = true;
           fileReader.readAsArrayBuffer(file);
           this.uploadVideo();
-          this.saved = false;
         }
         break;
       case 'image':
@@ -538,7 +537,6 @@ export class VideoCreateComponent
                 .then((thumbnail) => {
                   this.image.preview = thumbnail;
                   this.uploadVideo();
-                  this.saved = false;
                 })
                 .catch(() => {
                   this.toast.warning('Cannot load the image file.');
@@ -582,7 +580,6 @@ export class VideoCreateComponent
               });
             this.video.type = 'video/';
             this.uploadVideo();
-            this.saved = false;
           })
           .catch((err) => {
             console.log('error', err);
@@ -602,7 +599,6 @@ export class VideoCreateComponent
             this.thumbnail_loading = true;
             fileReader.readAsArrayBuffer(file);
             this.uploadVideo();
-            this.saved = false;
           }
         } catch (e) {
           this.toast.error('Loading the PDF file is failed. Please try agian');
@@ -617,7 +613,6 @@ export class VideoCreateComponent
             .then((thumbnail) => {
               this.image.preview = thumbnail;
               this.uploadVideo();
-              this.saved = false;
             })
             .catch(() => {
               this.toast.warning('Cannot load the image file.');
@@ -715,7 +710,6 @@ export class VideoCreateComponent
   }
 
   checkVideoUrl(): void {
-    this.saved = false;
     if (this.video.url.toLowerCase().indexOf('youtube.com') > -1) {
       this.getYoutubeId();
     }
