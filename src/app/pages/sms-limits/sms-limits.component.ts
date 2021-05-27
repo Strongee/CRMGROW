@@ -23,8 +23,9 @@ export class SmsLimitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe(
-      (profile) => {
+    this.profileSubscription = this.userService
+      .loadProfile()
+      .subscribe((profile) => {
         if (profile) {
           this.user = profile;
           if (this.user?.text_info?.is_limit) {
@@ -36,16 +37,15 @@ export class SmsLimitsComponent implements OnInit {
             this.leftSms = 0;
           }
 
-          if (this.user.proxy_number != '') {
+          if (this.user.proxy_number && this.user.proxy_number != '') {
             this.smsType = 'signal';
-          } else if (this.user.twilio_number != '') {
+          } else if (this.user.twilio_number && this.user.twilio_number != '') {
             this.smsType = 'twilio';
           } else {
             this.smsType = 'no';
           }
         }
-      }
-    );
+      });
   }
 
   changeType(type: string): void {
