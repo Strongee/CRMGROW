@@ -466,6 +466,13 @@ export class UserService extends HttpService {
       );
   }
 
+  public getUserInfo(id): Observable<any> {
+    return this.httpClient.get(this.server + USER.INFO + id).pipe(
+      map((res) => res),
+      catchError(this.handleError('GET USER INFO'))
+    );
+  }
+
   public getUserInfoItem(type: string): any {
     const user = this.getUser();
     return user[type];
