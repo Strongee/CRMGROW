@@ -157,11 +157,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
     this.handlerService.pageName.next('contacts');
     const pageSize = this.contactService.pageSize.getValue();
     this.pageSize = { id: pageSize, label: pageSize + '' };
-
+    this.dealsService.getStageWithContact().subscribe((res) => {
+      this.deals = res;
+    });
     this.storeService.pageContacts$.subscribe((contacts) => {
-      this.dealsService.getStageWithContact().subscribe((res) => {
-        this.deals = res;
-      });
       for (let i = 0; i < contacts.length; i++) {
         contacts[i].stages = [];
         for (let j = 0; j < this.deals.length; j++) {
