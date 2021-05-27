@@ -107,18 +107,17 @@
           </thead>
           <tbody>
           <ng-container *ngFor="let user of users | paginate : {id: 'users', itemsPerPage: 100, currentPage: userPage, totalItems: userCount}">
-              <!-- <tr *ngIf="user.customer && user.customer.email"> -->
-              <tr>
+              <tr *ngIf="user.customer && user.customer.email">
                 <td class="pl-0">
                   <div class="v-center">
                     <div class="name-avatar font-weight-bold mr-2">
-                      {{user.user_name ? getAvatarName(user.user_name) : 'UN'}}
+                      {{user.customer.name ? getAvatarName(user.customer.name) : 'UN'}}
                     </div>
-                    <div class="name">{{user.user_name || 'Unnamed'}}</div>
+                    <div class="name">{{user.customer.name || 'Unnamed'}}</div>
                   </div>
                 </td>
                 <td>
-                  {{user.email || 'Undefined'}} {{user.tier}}
+                  {{user.customer.email || 'Undefined'}}
                 </td>
                 <td>
                   <div class="status" [class.active]="user.conversion_state == 'conversion'" [class.pending]="user.conversion_state == 'lead'">
