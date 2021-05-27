@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -56,10 +56,6 @@ export class VerifyEmailComponent implements OnInit {
             );
           }
         });
-    } else {
-      this.toast.error(
-        'Your email is not verified. Please contact us with Support Team'
-      );
     }
   }
 }

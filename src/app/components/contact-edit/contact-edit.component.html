@@ -14,22 +14,39 @@
       <div class="row">
         <div class="col-sm-6 col-12 form-group" [ngClass]="{invalid: form.submitted && first_name.invalid && (first_name.dirty || first_name.touched || form.submitted)}">
           <label for="first_name_cc">first name</label>
-          <input type="text" id="first_name_cc" class="form-control" required name="first_name"  #first_name="ngModel" [(ngModel)]="contact.first_name" />
+          <input type="text" id="first_name_cc"
+                 class="form-control"
+                 required name="first_name"
+                 #first_name="ngModel"
+                 [(ngModel)]="contact.first_name"
+                 [class.disabled]="isSharedContact && !!contact.first_name"
+          />
           <span class="error" *ngIf="first_name.errors">
             <ng-container *ngIf="first_name.errors.required">First name is required!</ng-container>
           </span>
         </div>
         <div class="col-sm-6 col-12 form-group">
           <label for="last_name_cc">last name</label>
-          <input type="text" id="last_name_cc" class="form-control" name="last_name"  #last_name="ngModel" [(ngModel)]="contact.last_name" />
+          <input type="text"
+                 id="last_name_cc"
+                 class="form-control"
+                 name="last_name"
+                 #last_name="ngModel"
+                 [(ngModel)]="contact.last_name"
+                 [class.disabled]="isSharedContact && !!contact.last_name"
+          />
         </div>
       </div>
       <div class="row">
         <div class="col-sm-6 col-12 form-group position-relative" [ngClass]="{invalid: form.submitted && email.invalid && (email.dirty || email.touched || form.submitted)}">
           <label for="email_cc">email</label>
           <input type="email" id="email_cc" class="form-control" name="email"
-            [(ngModel)]="contact.email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"
-            #email="ngModel" (ngModelChange)="checkEmailDuplicate($event)"/>
+              [(ngModel)]="contact.email"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"
+              #email="ngModel"
+              (ngModelChange)="checkEmailDuplicate($event)"
+              [class.disabled]="isSharedContact && !!contact.email"
+          />
             <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
               <i class="d-block i-icon i-close bgc-dark" *ngIf="sameEmailsFlag"></i>
               <i class="d-block i-icon i-triangle-down bgc-dark sm" style="margin-right: 2px;" *ngIf="!sameEmailsFlag"></i>
@@ -63,6 +80,8 @@
             (ngModelChange)="checkPhoneDuplicate($event)"
             name="phone"
             #phoneControl
+            [disabled]="isSharedContact && contact_phone"
+            [class.disabled]="isSharedContact && contact_phone"
           >
           </app-phone-input>
           <span class="error d-block mt-1" *ngIf="phoneControl && contact_phone && !phoneControl.valid">
