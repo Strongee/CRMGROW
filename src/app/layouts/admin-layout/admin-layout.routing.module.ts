@@ -100,14 +100,16 @@ export const AdminLayoutRoutes: Routes = [
     component: VideoCreateComponent,
     data: {
       title: 'Materials'
-    }
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'materials/create/:mode/:folder',
     component: VideoCreateComponent,
     data: {
       title: 'Materials'
-    }
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'materials/analytics/:id',
