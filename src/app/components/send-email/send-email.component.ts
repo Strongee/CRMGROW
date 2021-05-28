@@ -387,10 +387,14 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
 
   checkModified(): boolean {
     if (this.initEmailContent !== this.emailContent) {
-      return true;
+      if (this.emailContent !== null) {
+        return true;
+      }
     }
     if (this.initEmailSubject !== this.emailSubject) {
-      return true;
+      if (this.emailSubject !== null) {
+        return true;
+      }
     }
     if (this.initEmailContacts.length !== this.emailContacts.length) {
       return true;
@@ -438,6 +442,8 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
             this.dialogRef.close();
           }
         });
+      } else {
+        this.dialogRef.close();
       }
     } else {
       this.dialogRef.close();
