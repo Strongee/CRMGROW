@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
     { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
-    // { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
+    { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
     {
