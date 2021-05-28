@@ -69,6 +69,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   garbage: Garbage = new Garbage();
   garbageSubscription: Subscription;
   dialogType = '';
+  isMinimizable = true;
 
   initEmailContent = '';
   initEmailSubject = '';
@@ -375,8 +376,12 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   }
 
   minimizeDialog(): void {
-    const windowType = this.storeService.emailWindowType.getValue();
-    this.storeService.emailWindowType.next(!windowType);
+    if (this.dialogType === 'global') {
+      const windowType = this.storeService.emailWindowType.getValue();
+      this.storeService.emailWindowType.next(!windowType);
+    } else {
+      this.isMinimizable = !this.isMinimizable;
+    }
   }
 
   saveInitValue(): void {
