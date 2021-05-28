@@ -1295,13 +1295,13 @@ export const BulkActions = {
       command: 'text',
       loading: false
     },
-    // {
-    //   label: 'New Call',
-    //   type: 'button',
-    //   icon: 'i-phone',
-    //   command: 'call',
-    //   loading: false
-    // },
+    {
+      label: 'New Call',
+      type: 'button',
+      icon: 'i-phone',
+      command: 'call',
+      loading: false
+    },
     {
       label: 'New Note',
       type: 'button',
