@@ -83,8 +83,8 @@
             <a class="dropdown-item">
               <span class="f-3 fw-600">Training & Help</span>
             </a>
-            <a class="dropdown-item">
-              <a href="https://crmgrow.com/demo" target="_blank"><span class="f-3 fw-600">Live Training</span></a>
+            <a class="dropdown-item" href="https://crmgrow.com/demo" target="_blank">
+              <span class="f-3 fw-600">Live Training</span>
             </a>
           </div>
         </div>
@@ -165,7 +165,7 @@
       <!-- Emailing Task Progressing Status -->
       <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
         <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
-          <a [routerLink]="['/messages']" class="no-carot d-block position-relative">
+          <a class="no-carot d-block position-relative">
             <i class="i-icon i-sent-mail bgc-blue d-block email-sending-icon"></i>
             <span class="badge email-badge">{{emailTasks.length}}</span>
           </a>

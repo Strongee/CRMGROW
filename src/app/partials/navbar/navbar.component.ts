@@ -308,9 +308,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
                   failed += _task.exec_result.failed.length;
                   if (_task.exec_result.succeed) {
                     succeed += _task.exec_result.succeed.length;
+                  } else {
+                    succeed +=
+                      _task.contacts.length - _task.exec_result.failed.length;
                   }
-                  succeed +=
-                    _task.contacts.length - _task.exec_result.failed.length;
                 }
               });
               e.failed = failed;
