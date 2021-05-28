@@ -9,12 +9,36 @@ import { getNotificationDetail } from 'src/app/utils/functions';
   styleUrls: ['./notifications-list.component.scss']
 })
 export class NotificationsListComponent implements OnInit {
+  DISPLAY_COLUMNS = ['select', 'icon', 'content', 'action'];
+  ACTIONS = [
+    {
+      label: 'Mark as read',
+      loadingLabel: 'Marking as read...',
+      type: 'button',
+      command: 'edit',
+      loading: false
+    },
+    {
+      label: 'Delete',
+      loadingLabel: 'Deleting...',
+      type: 'button',
+      command: 'delete',
+      loading: false
+    },
+    {
+      label: 'Deselect',
+      type: 'button',
+      command: 'deselect',
+      loading: false
+    }
+  ];
   notifications: any[] = [];
   loading = false;
   loadSubscription: Subscription;
   page = 1;
   total = 0;
   getNotificationDetail = getNotificationDetail;
+  selectedIds = [];
 
   constructor(private notificationService: NotificationService) {
     this.loadPage(1);
@@ -67,4 +91,27 @@ export class NotificationsListComponent implements OnInit {
       }
     });
   }
+
+  toggle(item): void {
+    const pos = this.selectedIds.indexOf(item._id);
+    if (pos !== -1) {
+      this.selectedIds.splice(pos, 1);
+    } else {
+      this.selectedIds.push(item._id);
+    }
+  }
+  isSelected(item): boolean {
+    const pos = this.selectedIds.indexOf(item._id);
+    return pos !== -1;
+  }
+  isAllSelected(item): boolean {
+    const selected = this.notifications.filter((e) => {
+      return this.selectedIds.indexOf(e._id) !== -1;
+    });
+    return selected.length === this.notifications.length;
+  }
+  masterToggle(): void {
+
+  }
+  doAction(command): void {}
 }

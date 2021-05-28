@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { DealsService } from 'src/app/services/deals.service';
 
 @Component({
   selector: 'app-contact-edit',
@@ -36,6 +37,7 @@ export class ContactEditComponent implements OnInit {
   second_contact_phone: any = {};
   contact: Contact = new Contact();
   panelOpenState = false;
+  stages = [];
 
   // Variables for the checking duplicate
   sameEmailContacts = [];
@@ -58,6 +60,7 @@ export class ContactEditComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ContactEditComponent>,
     private contactService: ContactService,
+    private dealsService: DealsService,
     private router: Router,
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -92,7 +95,22 @@ export class ContactEditComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dealsService.stages$.subscribe((res) => {
+      const index = res.findIndex((item) => item._id === null);
+      const nullStage = [
+        {
+          _id: null,
+          title: 'None'
+        }
+      ];
+      if (index < 0) {
+        this.stages = [...nullStage, ...res];
+      } else {
+        this.stages = res;
+      }
+    });
+  }
 
   update(): void {
     if (this.contact.state == 'None') {
@@ -133,7 +151,7 @@ export class ContactEditComponent implements OnInit {
     if (this.contact.email) {
       this.contact.email = this.contact.email.replace(/\s/g, '');
     }
-
+    console.log('#####', this.contact);
     this.isUpdating = true;
     this.updateSubscription && this.updateSubscription.unsubscribe();
     this.updateSubscription = this.contactService

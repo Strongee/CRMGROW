@@ -354,15 +354,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
           });
 
           const latest = _.maxBy(this.notifications, (e) =>
-            new Date(e.updated_at).getTime()
+            new Date(e?.updated_at).getTime()
           );
           if (
             this.latestAt &&
-            this.latestAt.getTime() < new Date(latest.updated_at).getTime()
+            this.latestAt.getTime() < new Date(latest?.updated_at).getTime()
           ) {
             // Check the new incoming notifications and trackers
             this.incomingNotifications = this.notifications.filter((e) => {
-              return new Date(e.updated_at).getTime() > this.latestAt.getTime();
+              return (
+                new Date(e?.updated_at).getTime() > this.latestAt.getTime()
+              );
             });
             const trackerNotifications = this.incomingNotifications.filter(
               (e) => {
@@ -397,7 +399,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
               );
             }
           }
-          this.latestAt = new Date(latest.updated_at);
+          if (latest) {
+            this.latestAt = new Date(latest.updated_at);
+          }
         }
       });
   }

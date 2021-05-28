@@ -146,13 +146,19 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 col-12 form-group">
+        <div class="col-sm-4 col-12 form-group">
           <label for="status_uc">status</label>
           <app-label-select [value]="contact.label" (valueChange)="updateLabel($event)" type="form"></app-label-select>
         </div>
-        <div class="col-sm-6 col-12 form-group">
+        <div class="col-sm-4 col-12 form-group">
           <label for="company_uc">website</label>
           <input type="text" id="company_uc" class="form-control" [(ngModel)]="contact.website" name="website" #website="ngModel">
+        </div>
+        <div class="col-sm-4 col-12 form-group">
+          <label for="stage_cc">Deal Stage</label>
+          <select id="stage_cc" class="form-control" [(ngModel)]="contact.deal_stage" name="stage" #stage="ngModel">
+            <option *ngFor="let stage of stages" value="{{stage._id}}">{{stage.title}}</option>
+          </select>
         </div>
       </div>
       <div class="row" [class.d-none]="!panelOpenState">
