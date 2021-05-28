@@ -972,7 +972,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       },
       width: '100vw',
       panelClass: 'send-email',
-      backdropClass: 'cdk-send-email',
+      backdropClass: 'cdk-send-email-closable',
       disableClose: false,
       data: {
         contact: this.contact

@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PhoneInputComponent } from '../phone-input/phone-input.component';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 import { DealsService } from 'src/app/services/deals.service';
 
 @Component({
@@ -48,6 +49,7 @@ export class ContactEditComponent implements OnInit {
 
   isUpdating = false;
   updateSubscription: Subscription;
+  isSharedContact = false;
 
   phoneInput: FormControl = new FormControl();
   @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
@@ -60,6 +62,7 @@ export class ContactEditComponent implements OnInit {
     private contactService: ContactService,
     private dealsService: DealsService,
     private router: Router,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data) {
@@ -75,6 +78,19 @@ export class ContactEditComponent implements OnInit {
       }
       if (this.data.type == 'second') {
         this.panelOpenState = true;
+      }
+      if (this.contact) {
+        this.userService.profile$.subscribe((user) => {
+          if (user) {
+            const userId = user._id;
+            if (
+              this.contact['shared_contact'] &&
+              this.contact['user'].indexOf(userId) < 0
+            ) {
+              this.isSharedContact = true;
+            }
+          }
+        });
       }
     }
   }
