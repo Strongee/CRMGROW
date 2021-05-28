@@ -1,3 +1,4 @@
+import { DealStage } from './../../models/deal-stage.model';
 import {
   Component,
   OnInit,
@@ -30,7 +31,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { searchReg } from 'src/app/helper';
 
 interface Stage {
-  title: string;
+  _id: string;
   isNew?: boolean;
 }
 
@@ -41,6 +42,7 @@ interface Stage {
 })
 export class InputStageComponent implements OnInit {
   separatorKeyCodes: number[] = [ENTER, COMMA];
+  STATES = [];
   keyword = '';
   searching = false;
   addOnBlur = false;
@@ -59,12 +61,13 @@ export class InputStageComponent implements OnInit {
   protected _onDestroy = new Subject<void>();
 
   filteredResults: ReplaySubject<Stage[]> = new ReplaySubject<Stage[]>(1);
-
   constructor(private dealsService: DealsService) {
+    this.dealsService.easyLoadImpl().subscribe((res) => {
+      this.STATES = res;
+    });
     this.dealsService.getStage();
     this.dealsService.stages$.subscribe((stages) => {
       this.filteredResults.next(stages);
-      console.log('filter');
     });
   }
 
@@ -86,19 +89,19 @@ export class InputStageComponent implements OnInit {
           data.subscribe((stages) => {
             const selectedStages = [];
             this.selectedStages.forEach((e) => {
-              selectedStages.push({ title: e });
+              selectedStages.push({ _id: e });
             });
             const remained = _.difference(stages, this.selectedStages);
             const res = _.filter(remained, (e) => {
-              if (e.title != -1) {
-                return searchReg(e.title, this.keyword);
+              if (e._id != -1) {
+                return searchReg(e._id, this.keyword);
               }
             });
             this.searching = false;
             if (res.length) {
               this.filteredResults.next(res);
             } else if (this.keyword && !this.onlyFromSearch) {
-              this.filteredResults.next([{ title: this.keyword, isNew: true }]);
+              this.filteredResults.next([{ _id: this.keyword, isNew: true }]);
             }
           });
         },
@@ -125,7 +128,7 @@ export class InputStageComponent implements OnInit {
       return e === stage;
     });
     if (index === -1) {
-      this.selectedStages.push(stage.title);
+      this.selectedStages.push(stage._id);
     }
     this.inputFieldRef.nativeElement.value = '';
     this.optionsFocused = false;
@@ -150,12 +153,12 @@ export class InputStageComponent implements OnInit {
     if (this.optionsFocused || !event.value) {
       return;
     }
-    const stage: Stage = { title: event.value };
+    const stage: Stage = { _id: event.value };
     const index = _.findIndex(this.selectedStages, function (e) {
       return e === stage;
     });
     if (index === -1) {
-      this.selectedStages.push(stage.title);
+      this.selectedStages.push(stage._id);
     }
     this.inputField.closePanel();
     this.inputFieldRef.nativeElement.value = '';
@@ -163,5 +166,13 @@ export class InputStageComponent implements OnInit {
     this.formControl.setValue(null);
     this.keyword = '';
     this.onSelect.emit();
+  }
+
+  getStage(stage): string {
+    for (let i = 0; i < this.STATES.length; i++) {
+      if (stage == this.STATES[i]._id) {
+        return this.STATES[i].title;
+      }
+    }
   }
 }
