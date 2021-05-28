@@ -423,7 +423,6 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     }
     return false;
   }
-
   closeDialog(): void {
     if (this.dialogType === 'global') {
       if (this.checkModified()) {
