@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
+import { DialogSettings } from 'src/app/constants/variable.constants';
 import { NotificationService } from 'src/app/services/notification.service';
 import { getNotificationDetail } from 'src/app/utils/functions';
 
@@ -32,6 +35,14 @@ export class NotificationsListComponent implements OnInit {
       loading: false
     }
   ];
+  ICONS = {
+    material_track: 'i-video',
+    unsubscribe: '',
+    open_email: '',
+    click_link: '',
+    bulk_email: '',
+    bulk_sms: ''
+  };
   notifications: any[] = [];
   loading = false;
   loadSubscription: Subscription;
@@ -40,7 +51,13 @@ export class NotificationsListComponent implements OnInit {
   getNotificationDetail = getNotificationDetail;
   selectedIds = [];
 
-  constructor(private notificationService: NotificationService) {
+  deleting = false;
+  updating = false;
+
+  constructor(
+    private notificationService: NotificationService,
+    private dialog: MatDialog
+  ) {
     this.loadPage(1);
   }
 
@@ -79,9 +96,40 @@ export class NotificationsListComponent implements OnInit {
       item.is_read = false;
     });
   }
+  markUnreadNotifications(ids: string[]): void {
+    this.updating = true;
+    this.notificationService.setAsRead(ids).subscribe(() => {
+      this.updating = false;
+      this.notifications.forEach((e) => {
+        if (ids.indexOf(e._id) !== -1) {
+          e.is_read = true;
+        }
+      });
+    });
+  }
 
   delete(item: any): void {
     this.notificationService.delete([item._id]).subscribe((res) => {
+      if (this.notifications.length > 1) {
+        this.loadPage(this.page);
+      } else {
+        this.page--;
+        this.page = this.page > 0 ? this.page : 1;
+        this.loadPage(this.page);
+      }
+    });
+  }
+  deleteItems(ids): void {
+    this.deleting = true;
+    this.notificationService.delete(ids).subscribe((res) => {
+      this.deleting = false;
+      this.notifications = this.notifications.filter((e) => {
+        if (this.selectedIds.indexOf(e._id) === -1) {
+          return true;
+        }
+        return false;
+      });
+      this.selectedIds = [];
       if (this.notifications.length > 1) {
         this.loadPage(this.page);
       } else {
@@ -104,14 +152,53 @@ export class NotificationsListComponent implements OnInit {
     const pos = this.selectedIds.indexOf(item._id);
     return pos !== -1;
   }
-  isAllSelected(item): boolean {
+  isAllSelected(): boolean {
     const selected = this.notifications.filter((e) => {
       return this.selectedIds.indexOf(e._id) !== -1;
     });
     return selected.length === this.notifications.length;
   }
   masterToggle(): void {
-
+    if (this.isAllSelected()) {
+      this.notifications.forEach((e) => {
+        const pos = this.selectedIds.indexOf(e._id);
+        if (pos !== -1) {
+          this.selectedIds.splice(pos, 1);
+        }
+      });
+    } else {
+      this.notifications.forEach((e) => {
+        if (this.selectedIds.indexOf(e._id) === -1) {
+          this.selectedIds.push(e._id);
+        }
+      });
+    }
   }
-  doAction(command): void {}
+  doAction(event): void {
+    switch (event.command) {
+      case 'deselect':
+        this.selectedIds = [];
+        break;
+      case 'delete':
+        this.dialog
+          .open(ConfirmComponent, {
+            ...DialogSettings.CONFIRM,
+            data: {
+              title: 'Delete notifications',
+              message: 'Are you sure to delete selected notifications?',
+              confirmLabel: 'Delete'
+            }
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              this.deleteItems(this.selectedIds);
+            }
+          });
+        break;
+      case 'edit':
+        this.markUnreadNotifications(this.selectedIds);
+        break;
+    }
+  }
 }

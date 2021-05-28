@@ -88,6 +88,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   latestAt;
   materialTrackingShower;
 
+  showSystemBar = true;
+  showAllSystemNotifications = false;
   constructor(
     public userService: UserService,
     public notificationService: NotificationService,
@@ -276,6 +278,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.selectedTextTab = tab;
   }
 
+  closeSystemBar(): void {
+    this.showSystemBar = false;
+    document.body.classList.remove('has-topbar');
+  }
+
+  openAllSystemNotifications(): void {
+    this.showAllSystemNotifications = true;
+  }
+
   loadNotifications(): void {
     this.notificationLoadSubscription &&
       this.notificationLoadSubscription.unsubscribe();
@@ -285,7 +296,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (res) {
           this.systemNotifications = res['system_notifications'] || [];
 
-          if (this.systemNotifications.length) {
+          if (this.systemNotifications.length && this.showSystemBar) {
             document.body.classList.add('has-topbar');
           } else {
             document.body.classList.remove('has-topbar');

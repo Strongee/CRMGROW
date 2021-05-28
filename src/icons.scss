@@ -696,3 +696,31 @@
   mask-image: url('/assets/img/activities/shared.svg');
   background-color: #101336;
 }
+
+.n_material_track {
+  mask-image: url('/assets/img/video.svg');
+  background-color: #0000ff;
+}
+.n_unsubscribe {
+  mask-image: url('/assets/img/activities/email_unsubscribed.svg');
+  background-color: #F19D50;
+}
+.n_open_email {
+  mask-image: url('/assets/img/activities/email_opened.svg');
+  background-color: #f7b500;
+}
+.n_click_link {
+  mask-image: url('/assets/img/activities/link_clicked.svg');
+  background-color: #f7b500;
+}
+.n_bulk_email {
+  mask-image: url('/assets/img/activities/email.svg');
+  background-color: #ff9300;
+}
+.n_bulk_sms {
+  mask-image: url('/assets/img/activities/text.svg');
+  background-color: #01cc00;
+}
+.n_information {
+  mask-image: url('./assets/img/information.svg');
+}

@@ -281,9 +281,27 @@
     </div>
   </div>
 
-  <div id="notification-bar" *ngIf="systemNotifications.length">
-    <div class="global-notification-item" [innerHTML]="systemNotifications[0].content">
-    </div>
+  <div id="notification-bar" class="d-flex align-items-center" *ngIf="systemNotifications.length && showSystemBar" [class.expanded]="showAllSystemNotifications">
+    <ng-container *ngIf="!showAllSystemNotifications; else allSystemNotifications">
+      <div class="mx-auto flex-1">
+        <div class="first-item" [innerHTML]="systemNotifications[0].content"></div>
+        <span class="more-items ml-2 c-pointer" *ngIf="systemNotifications.length > 1" (click)="openAllSystemNotifications()">{{systemNotifications.length - 1}} more <span>notifications</span></span>
+      </div>
+      <div class="c-pointer mr-2" (click)="closeSystemBar()">
+        <i class="i-icon i-close d-block bgc-dark"></i>
+      </div>
+    </ng-container>
+    <ng-template #allSystemNotifications>
+      <ul class="my-2">
+        <li class="global-notification-item mt-2 text-left" *ngFor="let notification of systemNotifications">
+          <div [innerHTML]="notification.content"></div>
+        </li>
+      </ul>
+      <div class="bottom-actions">
+        <div class="collapse-action rounded f-3 px-2 mr-1 c-pointer" (click)="showAllSystemNotifications = false">Collapse notifications</div>
+        <!-- <div class="close-action rounded f-3 px-2 mr-1 c-pointer" (click)="closeSystemBar()">Close notifications</div> -->
+      </div>
+    </ng-template>
   </div>
 
   <div id="storm-dialer-bar">

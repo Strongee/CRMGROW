@@ -162,7 +162,7 @@ const NOTIFICATIONS = {
   material_track: '{who} has watched {material} {detail}',
   unsubscribe: '{who} has unsubscribed the emails from you.',
   open_email: '{who} has opened email from you.',
-  click_link: '{who} has clicked the link form your email.'
+  click_link: '{who} has clicked the link from your email.'
 };
 export function getNotificationDetail(notification): string {
   let creator = '';

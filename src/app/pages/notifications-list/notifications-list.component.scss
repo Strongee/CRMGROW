@@ -7,7 +7,7 @@
 }
 .notification-item {
   &:hover {
-    background-color: aliceblue;
+    background-color: #f0f8ff54;
   }
 
   .content {
@@ -18,6 +18,13 @@
     a {
       font-weight: 700;
     }
+  }
+
+  .n-icon .i-icon{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    margin-left: 5px;
   }
 
   &:not(.readed) {
@@ -49,6 +56,49 @@
   }
 }
 
+.table-header {
+  height: unset;
+
+  &.selected {
+    height: 48px;
+    border-bottom: 1px solid gainsboro;
+
+    th {
+      border-bottom: none;
+    }
+  }
+}
+
 .empty-header {
   height: unset!important;
+}
+
+.icon-cell {
+  width: 60px;
+}
+td.icon-cell {
+  vertical-align: top;
+}
+.select-cell {
+  width: 44px;
+}
+td.select-cell {
+  vertical-align: top;
+}
+.notification-col {
+  font-size: 14px;
+
+  @media screen and (max-width: 400px) {
+    font-size: 12px;
+  }
+}
+td.notification-col {
+  vertical-align: top;
+}
+tr.mat-row {
+  height: 60px;
+}
+td.mat-cell:last-of-type{
+  padding-right: 0px;
+  width: 30px;
 }
