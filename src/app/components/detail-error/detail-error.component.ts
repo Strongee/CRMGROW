@@ -42,8 +42,7 @@ export class DetailErrorComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   connectMail(type: string): void {
     if (type === 'gmail' || type === 'outlook') {

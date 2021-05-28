@@ -546,7 +546,7 @@
           *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selectedFiles.length + selectedFolders.length" class="table-header"></tr>
         <tr mat-header-row *matHeaderRowDef="['selection_info']" [class.d-none]="!selectedFiles.length" class='selection-info'></tr>
         <tr mat-row
-          *matRowDef="let row; let index=index; columns: DISPLAY_COLUMNS;" [class.folder-row]="row.material_type === 'folder'" (mouseleave)="rowHover(index)"></tr>
+          *matRowDef="let row; let index=index; columns: DISPLAY_COLUMNS;" [class.folder-row]="row.material_type === 'folder'" id="material-video-{{row._id}}" (mouseleave)="rowHover(index)"></tr>
       </table>
       <ng-container *ngIf="filteredMaterials.length">
         <div class="my-2 table-control mode-1">

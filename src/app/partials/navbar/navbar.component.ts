@@ -6,7 +6,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ContactCreateComponent } from 'src/app/components/contact-create/contact-create.component';
 import { NoteCreateComponent } from 'src/app/components/note-create/note-create.component';
 import { TaskCreateComponent } from 'src/app/components/task-create/task-create.component';
@@ -26,6 +26,7 @@ import { getNotificationDetail } from 'src/app/utils/functions';
 import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
+import { filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -87,6 +88,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   incomingNotifications = [];
   latestAt;
   materialTrackingShower;
+  emailDialog;
 
   showSystemBar = true;
   showAllSystemNotifications = false;
@@ -96,6 +98,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public handlerService: HandlerService,
     private connectService: ConnectService,
     private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute,
     private contactService: ContactService,
     private toast: ToastrService,
     private router: Router
@@ -131,6 +134,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.connectService.receiveLogout().subscribe(() => {
       this.logout(null);
     });
+    this.routerHandle();
   }
 
   ngOnDestroy(): void {
@@ -180,7 +184,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       case 'appointment':
         break;
       case 'message':
-        this.dialog.open(SendEmailComponent, {
+        this.emailDialog = this.dialog.open(SendEmailComponent, {
           position: {
             bottom: '0px',
             right: '0px'
@@ -188,7 +192,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
           width: '100vw',
           panelClass: 'send-email',
           backdropClass: 'cdk-send-email',
-          disableClose: false
+          disableClose: true,
+          data: {
+            type: 'global'
+          }
         });
         break;
       case 'record':
@@ -312,9 +319,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
                   failed += _task.exec_result.failed.length;
                   if (_task.exec_result.succeed) {
                     succeed += _task.exec_result.succeed.length;
+                  } else {
+                    succeed +=
+                      _task.contacts.length - _task.exec_result.failed.length;
                   }
-                  succeed +=
-                    _task.contacts.length - _task.exec_result.failed.length;
                 }
               });
               e.failed = failed;
@@ -358,15 +366,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
           });
 
           const latest = _.maxBy(this.notifications, (e) =>
-            new Date(e.updated_at).getTime()
+            new Date(e?.updated_at).getTime()
           );
           if (
             this.latestAt &&
-            this.latestAt.getTime() < new Date(latest.updated_at).getTime()
+            this.latestAt.getTime() < new Date(latest?.updated_at).getTime()
           ) {
             // Check the new incoming notifications and trackers
             this.incomingNotifications = this.notifications.filter((e) => {
-              return new Date(e.updated_at).getTime() > this.latestAt.getTime();
+              return (
+                new Date(e?.updated_at).getTime() > this.latestAt.getTime()
+              );
             });
             const trackerNotifications = this.incomingNotifications.filter(
               (e) => {
@@ -410,5 +420,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   isDisableAction(action): boolean {
     return this.disableActions.findIndex((item) => item.id === action.id) >= 0;
+  }
+
+  routerHandle(): void {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {})
+      )
+      .subscribe(() => {
+        if (this.emailDialog) {
+          this.emailDialog.close();
+        }
+      });
   }
 }

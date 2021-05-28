@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   OnInit,
   QueryList,
   ViewChild,
@@ -40,6 +41,7 @@ import { saveAs } from 'file-saver';
 import { VideoPopupComponent } from 'src/app/components/video-popup/video-popup.component';
 import { Location } from '@angular/common';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { relativeTimeRounding } from 'moment';
 
 @Component({
   selector: 'app-materials',
@@ -170,7 +172,8 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private clipboard: Clipboard,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private myElement: ElementRef
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -343,6 +346,7 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
             .afterClosed()
             .subscribe((res) => {
               this.location.replaceState(`/materials`);
+              this.goToMaterial(params['video']);
             });
         }
       });
@@ -403,7 +407,11 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
       pageMaterials,
       (a, b) => a === b._id
     );
-    return selectedPageMaterials.length === pageMaterials.length;
+    if (pageMaterials.length) {
+      return selectedPageMaterials.length === pageMaterials.length;
+    } else {
+      return false;
+    }
   }
 
   isAllSelected(): boolean {
@@ -1891,6 +1899,21 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
     this.dropdown = this.dropdowns['_results'][index];
     if (this.dropdown.isOpen()) {
       this.dropdown.close();
+    }
+  }
+
+  goToMaterial(id: string): void {
+    const el = this.myElement.nativeElement.querySelector(
+      '#material-video-' + id
+    );
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('focus');
+      setTimeout(() => {
+        if (el) {
+          el.classList.remove('focus');
+        }
+      }, 3000);
     }
   }
 }

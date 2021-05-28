@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PlanSelectComponent } from 'src/app/components/plan-select/plan-select.component';
 import { PurchaseMessageComponent } from '../../components/purchase-message/purchase-message.component';
 import { AddPhoneComponent } from '../../components/add-phone/add-phone.component';
+import { log } from 'console';
 
 @Component({
   selector: 'app-sms-limits',
@@ -18,13 +19,16 @@ export class SmsLimitsComponent implements OnInit {
   leftSms = 0;
   profileSubscription: Subscription;
 
-  constructor(private userService: UserService, private dialog: MatDialog) {
+  constructor(private userService: UserService, private dialog: MatDialog) {}
+
+  ngOnInit(): void {
     this.profileSubscription && this.profileSubscription.unsubscribe();
-    this.profileSubscription = this.userService.profile$.subscribe(
-      (profile) => {
+    this.profileSubscription = this.userService
+      .loadProfile()
+      .subscribe((profile) => {
         if (profile) {
           this.user = profile;
-          if (this.user?.text_info.is_limit) {
+          if (this.user?.text_info?.is_limit) {
             this.leftSms =
               this.user?.text_info?.max_count -
               this.user?.text_info?.count +
@@ -33,19 +37,16 @@ export class SmsLimitsComponent implements OnInit {
             this.leftSms = 0;
           }
 
-          if (this.user.proxy_number != '') {
+          if (this.user.proxy_number && this.user.proxy_number != '') {
             this.smsType = 'signal';
-          } else if (this.user.twilio_number != '') {
+          } else if (this.user.twilio_number && this.user.twilio_number != '') {
             this.smsType = 'twilio';
           } else {
             this.smsType = 'no';
           }
         }
-      }
-    );
+      });
   }
-
-  ngOnInit(): void {}
 
   changeType(type: string): void {
     this.smsType = type;
@@ -65,10 +66,14 @@ export class SmsLimitsComponent implements OnInit {
           this.userService.loadProfile().subscribe((profile) => {
             if (profile) {
               this.user = profile;
-              this.leftSms =
-                this.user?.text_info?.max_count -
-                this.user?.text_info?.count +
-                this.user?.text_info?.additional_credit?.amount;
+              if (this.user?.text_info?.is_limit) {
+                this.leftSms =
+                  this.user?.text_info?.max_count -
+                  this.user?.text_info?.count +
+                  this.user?.text_info?.additional_credit?.amount;
+              } else {
+                this.leftSms = 0;
+              }
             }
           });
         }
@@ -94,6 +99,7 @@ export class SmsLimitsComponent implements OnInit {
               this.user.twilio_number = res;
               break;
             case 'no':
+              this.smsType = 'twilio';
               this.user.twilio_number = res;
               break;
           }

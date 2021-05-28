@@ -27,6 +27,8 @@ import { Subscription } from 'rxjs';
 import { Garbage } from 'src/app/models/garbage.model';
 import { ConnectService } from 'src/app/services/connect.service';
 import { StripTagsPipe } from 'ngx-pipes';
+import { ConfirmComponent } from '../confirm/confirm.component';
+
 @Component({
   selector: 'app-send-email',
   templateUrl: './send-email.component.html',
@@ -65,6 +67,14 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   isCalendly = false;
   garbage: Garbage = new Garbage();
   garbageSubscription: Subscription;
+  dialogType = '';
+  isMinimizable = true;
+
+  initEmailContent = '';
+  initEmailSubject = '';
+  initEmailContacts: Contact[] = [];
+  initCcContacts: Contact[] = [];
+  initBccContacts: Contact[] = [];
 
   @ViewChild('editor') htmlEditor: HtmlEditorComponent;
   constructor(
@@ -94,6 +104,9 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
         this.emailContacts = [...this.data.contacts];
       }
     }
+    if (this.data && this.data.type) {
+      this.dialogType = this.data.type;
+    }
     this.garbageSubscription && this.garbageSubscription.unsubscribe();
     this.garbageSubscription = this.userService.garbage$.subscribe((res) => {
       this.garbage = res;
@@ -111,6 +124,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
       this.emailSubject = defaultEmail.subject;
       this.emailContent = defaultEmail.content;
     }
+    this.saveInitValue();
   }
 
   ngAfterViewInit(): void {}
@@ -357,5 +371,81 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
 
   isFocus(): any {
     return this.toFocus;
+  }
+
+  minimizeDialog(): void {
+    this.isMinimizable = !this.isMinimizable;
+  }
+
+  saveInitValue(): void {
+    this.initEmailContent = this.emailContent;
+    this.initEmailSubject = this.emailSubject;
+    this.initEmailContacts = [...this.emailContacts];
+    this.initCcContacts = [...this.ccContacts];
+    this.initBccContacts = [...this.bccContacts];
+  }
+
+  checkModified(): boolean {
+    if (this.initEmailContent !== this.emailContent) {
+      if (this.emailContent !== null) {
+        return true;
+      }
+    }
+    if (this.initEmailSubject !== this.emailSubject) {
+      if (this.emailSubject !== null) {
+        return true;
+      }
+    }
+    if (this.initEmailContacts.length !== this.emailContacts.length) {
+      return true;
+    } else {
+      if (
+        !_.differenceWith(this.initEmailContacts, this.emailContacts, _.isEqual)
+      ) {
+        return true;
+      }
+    }
+    if (this.initCcContacts.length !== this.ccContacts.length) {
+      return true;
+    } else {
+      if (!_.differenceWith(this.initCcContacts, this.ccContacts, _.isEqual)) {
+        return true;
+      }
+    }
+    if (this.initBccContacts.length !== this.bccContacts.length) {
+      return true;
+    } else {
+      if (
+        !_.differenceWith(this.initBccContacts, this.bccContacts, _.isEqual)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+  closeDialog(): void {
+    if (this.dialogType === 'global') {
+      if (this.checkModified()) {
+        const confirmDialog = this.dialog.open(ConfirmComponent, {
+          position: { top: '100px' },
+          data: {
+            title: 'Edit Email',
+            message:
+              'Your email is modified. Are you sure to leave this email?',
+            confirmLabel: 'Yes',
+            cancelLabel: 'No'
+          }
+        });
+        confirmDialog.afterClosed().subscribe((res) => {
+          if (res) {
+            this.dialogRef.close();
+          }
+        });
+      } else {
+        this.dialogRef.close();
+      }
+    } else {
+      this.dialogRef.close();
+    }
   }
 }
