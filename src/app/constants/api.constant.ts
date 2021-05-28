@@ -41,7 +41,8 @@ export const USER = {
   DISCONNECT_CALENDAR: 'user/discon-calendar',
   CANCEL_ACCOUNT: 'user/cancel-account',
   UPDATE_PACKAGE: 'user/update-package',
-  CHECK_DOWNGRADE: 'user/check-downgrade'
+  CHECK_DOWNGRADE: 'user/check-downgrade',
+  INFO: 'user/'
 };
 export const GUEST = {
   LOAD: 'guest/load',

@@ -68,6 +68,7 @@ import { TestComponent } from '../../pages/test/test.component';
 import { StripeModule } from 'stripe-angular';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
+import { VerifyEmailComponent } from '../../pages/verify-email/verify-email.component';
 
 const config: SocketIoConfig = { url: environment.server, options: {} };
 
@@ -123,7 +124,8 @@ const config: SocketIoConfig = { url: environment.server, options: {} };
     TeamShareContactComponent,
     TeamShareAutomationComponent,
     TeamShareTemplateComponent,
-    TestComponent
+    TestComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CommonModule,

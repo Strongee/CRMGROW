@@ -128,21 +128,23 @@
     </div>
   </ng-container>
 
-  <!-- <h6 class="font-weight-bold">Other apps</h6>
-  <div class="integration-account">
-    <div class="icon">
-      <img src="../../../assets/img/dialer.png">
-    </div>
-    <div class="content">
-      <div class="title f-3 font-weight-bold mb-1">Calendly</div>
-      <div class="desc f-2 op-75">
-        Connect calandly to seamlessly create and schedule meetings.
+  <h6 class="font-weight-bold">Other apps</h6>
+  <ng-container *ngIf="user._id === '6035a9da27952a3187d07276'">
+    <div class="integration-account">
+      <div class="icon">
+        <img src="../../../assets/img/dialer.png">
       </div>
+      <div class="content">
+        <div class="title f-3 font-weight-bold mb-1">Dialer</div>
+        <div class="desc f-2 op-75">
+          Connect dialer to call your contact directly.
+        </div>
+      </div>
+      <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="buyDial()">
+        Buy
+      </button>
     </div>
-    <button class="btn bg-white c-blue border-primary f-3 font-weight-bold connect" (click)="buyDial()">
-      Buy
-    </button>
-  </div> -->
+  </ng-container>
 
   <div class="integration-account zapier">
     <div class="integration-header">

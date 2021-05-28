@@ -23,6 +23,7 @@ import { AnalyticsMaterialComponent } from '../../pages/analytics-material/analy
 import { NotificationsListComponent } from 'src/app/pages/notifications-list/notifications-list.component';
 import { MessagesComponent } from 'src/app/pages/messages/messages.component';
 import { TestComponent } from 'src/app/pages/test/test.component';
+import { VerifyEmailComponent } from '../../pages/verify-email/verify-email.component';
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -100,14 +101,16 @@ export const AdminLayoutRoutes: Routes = [
     component: VideoCreateComponent,
     data: {
       title: 'Materials'
-    }
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'materials/create/:mode/:folder',
     component: VideoCreateComponent,
     data: {
       title: 'Materials'
-    }
+    },
+    canDeactivate: [PageExitGuard]
   },
   {
     path: 'materials/analytics/:id',
@@ -317,5 +320,12 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: 'test',
     component: TestComponent
+  },
+  {
+    path: 'verify-email/:id',
+    component: VerifyEmailComponent,
+    data: {
+      title: 'Verify Email'
+    }
   }
 ];

@@ -6,39 +6,145 @@
       <span>Notification Settings</span>
     </a>
   </div>
-  <div class="notifications-list pt-3">
+  <div class="notifications-list">
     <div *ngIf="notifications.length; else emptyTemplate">
-      <ng-container *ngFor="let item of notifications | paginate: {id: 'notifications', itemsPerPage: 15, currentPage: page, totalItems: total}; let i = index;">
-        <div class="notification-item d-flex py-2 pl-3 pr-2 rounded mb-1" [class.readed]="item.is_read">
-          <div class="icon mr-2">
-            <i class="i-icon lg i-information d-block bgc-red"></i>
-          </div>
+      <table class="w-100 page-table"
+        mat-table
+        [dataSource]="notifications | paginate: {id: 'notifications', itemsPerPage: 15, currentPage: page, totalItems: total}">
+
+        <ng-container matColumnDef="loader-cell">
+          <th mat-header-cell
+            *matHeaderCellDef colspan="9" class="loader-cell">
+            <div class="updating-status" *ngIf="loading || deleting || updating">
+              {{loading ? 'Loading' : (deleting ? 'Deleting' : (updating ? 'Marking as read' : ''))}}
+            </div>
+          </th>
+        </ng-container>
+
+        <ng-container matColumnDef="select">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+              *ngIf="!selectedIds.length; else selectBox" class="border-bottom-0 empty-header select-cell">
+            </th>
+            <ng-template #selectBox>
+              <th mat-header-cell
+                class="pl-1 select-cell">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox"
+                    class="custom-control-input"
+                    id="selectAllNotifications"
+                    (change)="$event ? masterToggle() : null"
+                    [checked]="isAllSelected()" />
+                  <label class="custom-control-label"
+                    for="selectAllNotifications"></label>
+                </div>
+              </th>
+            </ng-template>
+          </ng-container>
+          <td mat-cell
+            *matCellDef="let item"
+            class="pl-1 select-cell pt-3">
+            <div class="custom-control custom-checkbox mt-0">
+              <input type="checkbox"
+                class="custom-control-input"
+                id="notification-{{item._id}}"
+                (change)="toggle(item)"
+                [checked]="isSelected(item)" />
+              <label class="custom-control-label"
+                for="notification-{{item._id}}"></label>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="icon">
+          <ng-container *matHeaderCellDef>
+            <th mat-header-cell
+              *ngIf="!selectedIds.length; else toolHeader" class="border-bottom-0 empty-header icon-cell">
+            </th>
+            <ng-template #toolHeader>
+              <th mat-header-cell [colSpan]="9">
+                <div class="v-center">
+                  <span class="c-dark f-3 text-lowercase font-weight-bold">{{selectedIds.length}} selected</span>
+                  <app-actions-header
+                    [actions]="ACTIONS"
+                    (doCommand)="doAction($event)"
+                  ></app-actions-header>
+                </div>
+              </th>
+            </ng-template>
+          </ng-container>
+          <td mat-cell
+            *matCellDef="let item" class="icon-cell pt-2">
+            <div class="creator" *ngIf="item.creator && item.creator._id; else notificationIcon">
+              <img *ngIf="item.creator.picture_profile" [src]="item.creator.picture_profile">
+            </div>
+            <ng-template #notificationIcon>
+              <div class="icon mr-2 n-icon mt-1">
+                <i class="i-icon lg d-block {{'n_' + (item.criteria || 'information')}}"></i>
+              </div>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Country Column -->
+      <ng-container matColumnDef="content">
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell class="notification-col border-bottom-0 empty-header" *ngIf="!selectedIds.length"></th>
+        </ng-container>
+        <td mat-cell
+          *matCellDef="let item" class="notification-col pt-2">
           <div class="content">
             <div [innerHTML]="getNotificationDetail(item)"></div>
             <div *ngIf="item.description" [innerHTML]="item.description" class="description"></div>
             <div class="time">{{item.created_at | timeago}}</div>
           </div>
-          <div ngbDropdown placement="bottom-right" class="ml-auto actions-groups" *ngIf="item.type === 'personal'">
+        </td>
+      </ng-container>
+
+      <!-- Label Column -->
+      <ng-container matColumnDef="action">
+        <ng-container *matHeaderCellDef>
+          <th mat-header-cell
+          *ngIf="!selectedIds.length" class="border-bottom-0 empty-header"></th>
+        </ng-container>
+        <td mat-cell
+          *matCellDef="let item">
+          <div ngbDropdown placement="bottom-right" class="ml-auto actions-groups bottom-right" *ngIf="item.type === 'personal'">
             <a class="notification-action no-carot c-pointer" ngbDropdownToggle>
               <i class="i-icon i-menu-more bgc-blue d-block"></i>
             </a>
             <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-              <ng-container *ngIf="!item.is_read ;else unreadMark">
-                <a class="dropdown-item" (click)="setAsRead(item)">Set as read</a>
+              <ng-container *ngIf="!item.is_read; else unreadMark">
+                <a class="dropdown-item f-3" (click)="setAsRead(item)">Set as read</a>
               </ng-container>
               <ng-template #unreadMark>
-                <a class="dropdown-item" (click)="setAsUnread(item)">Set as unread</a>
+                <a class="dropdown-item f-3" (click)="setAsUnread(item)">Set as unread</a>
               </ng-template>
-              <a class="dropdown-item" (click)="delete(item)">Delete notification</a>
+              <a class="dropdown-item f-3" (click)="delete(item)">Delete notification</a>
             </div>
           </div>
-        </div>
+        </td>
       </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="DISPLAY_COLUMNS" [class.selected]="selectedIds.length" class="table-header"></tr>
+        <tr mat-header-row
+            *matHeaderRowDef="['loader-cell']" class="loader-row"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: DISPLAY_COLUMNS;" class="notification-item" [class.readed]="row.is_read"></tr>
+
+      </table>
     </div>
-    <div *ngIf="total">
-      <div class="pagination-wrapper" [hidden]="total <= 10">
-        <pagination-controls (pageChange)="loadPage($event)" id="notifications" maxSize="5" previousLabel=""
-        nextLabel=""></pagination-controls>
+    <div class="my-2 table-control mode-1 py-3" *ngIf="total">
+      <div class="pagination-wrapper m-auto" [hidden]="total <= 10">
+        <pagination-controls (pageChange)="loadPage($event)"
+          (pageBoundsCorrection)="loadPage($event)"
+          id="notifications"
+          maxSize="5"
+          previousLabel=""
+          nextLabel="">
+        </pagination-controls>
       </div>
     </div>
     <ng-template #emptyTemplate>

@@ -1045,9 +1045,6 @@ body{
       .page {
         padding-top: 150px;
       }
-      .navbar-toggler {
-        top: 68px;
-      }
     }
 
     .page-content {
@@ -2022,6 +2019,11 @@ body {
 }
 
 .cdk-send-email {
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.cdk-send-email-closable {
   background-color: transparent;
 }
 

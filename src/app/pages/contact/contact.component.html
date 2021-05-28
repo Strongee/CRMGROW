@@ -75,10 +75,12 @@
               <i class="i-icon i-sms-sent bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Text</span>
             </button>
-            <!-- <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
-              <i class="i-icon i-phone bgc-dark"></i>
-              <span class="ml-2 f-3 font-weight-bold">New Call</span>
-            </button>  -->
+            <ng-container *ngIf="userId === '6035a9da27952a3187d07276'">
+              <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
+                <i class="i-icon i-phone bgc-dark"></i>
+                <span class="ml-2 f-3 font-weight-bold">New Call</span>
+              </button>
+            </ng-container>
             <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openTaskDlg()">
               <i class="i-icon i-task bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Task</span>
@@ -372,34 +374,6 @@
         </app-slide-tab>
         <div class="history-list mt-3 position-relative">
           <div class="history-list-header v-center justify-content-end">
-            <ng-container *ngIf="tab.id === 'all'">
-              <div ngbDropdown class="v-center">
-                <div class="v-center" ngbDropdownToggle>
-                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2">
-                    {{activityType.id == 'all' ? 'Sort by' : activityType.label}}
-                  </span>
-                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
-                </div>
-                <div ngbDropdownMenu class="light">
-                  <div class="v-center justify-content-between dropdown-item"
-                       *ngFor="let tabItem of tabs" (click)="changeActivityTypes(tabItem)"
-                       [class.disable]="isDisableTab(tabItem)"
-                  >
-                    <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tabItem.id == activityType.id}" *ngIf="tabItem.id == 'all'; else others">
-                      All activity
-                    </div>
-                    <ng-template #others>
-                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tabItem.id == activityType.id}">
-                        {{tabItem.label}}
-                      </div>
-                    </ng-template>
-                    <div *ngIf="tabItem.id == activityType.id">
-                      <i class="d-block i-icon i-check bgc-blue"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ng-container>
             <ng-container *ngIf="tab.id === 'follow_up'">
               <div ngbDropdown class="v-center">
                 <div class="v-center" ngbDropdownToggle>
@@ -420,7 +394,7 @@
                 </div>
               </div>
             </ng-container>
-            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'note' || (tab.id !== 'all' && activityType.id === 'note')">
+            <div class="v-center justify-content-end c-pointer ml-auto" (click)="openNoteDlg()" *ngIf="tab.id === 'note' || (tab.id === 'all' && activityType.id === 'note')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Note</span>
             </div>
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openSendEmail()" *ngIf="tab.id === 'email' || (tab.id === 'all' && activityType.id === 'email')">
@@ -450,6 +424,34 @@
             <div class="v-center justify-content-end c-pointer ml-auto" (click)="openDealDlg()" *ngIf="tab.id === 'deal' || (tab.id === 'all' && activityType.id === 'deal')">
               <span class="f-3 font-weight-bold c-blue mr-2">New Deal</span>
             </div>
+            <ng-container *ngIf="tab.id === 'all'">
+              <div ngbDropdown class="v-center">
+                <div class="v-center" ngbDropdownToggle>
+                  <span class="f-3 font-weight-bold c-dark c-pointer mr-2">
+                    {{activityType.id == 'all' ? 'Sort by' : activityType.label}}
+                  </span>
+                  <i class="d-block i-icon i-triangle-down bgc-dark"></i>
+                </div>
+                <div ngbDropdownMenu class="light">
+                  <div class="v-center justify-content-between dropdown-item"
+                       *ngFor="let tabItem of tabs" (click)="changeActivityTypes(tabItem)"
+                       [class.disable]="isDisableTab(tabItem)"
+                  >
+                    <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tabItem.id == activityType.id}" *ngIf="tabItem.id == 'all'; else others">
+                      All activity
+                    </div>
+                    <ng-template #others>
+                      <div class="f-3 c-dark" [ngClass]="{'font-weight-bold': tabItem.id == activityType.id}">
+                        {{tabItem.label}}
+                      </div>
+                    </ng-template>
+                    <div *ngIf="tabItem.id == activityType.id">
+                      <i class="d-block i-icon i-check bgc-blue"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
           <ng-container *ngIf="tab.id === 'all'; else detailsTemplate">
             <ng-container *ngIf="activityType.id !== 'all' && !activityCounts[activityType.id]">

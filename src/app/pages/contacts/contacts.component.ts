@@ -127,6 +127,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
       this.isPackageGroupEmail = res.email_info?.mass_enable;
       this.isPackageText = res.text_info?.is_enabled;
 
+      if (res && res._id && res._id !== '6035a9da27952a3187d07276') {
+        this.ACTIONS.some((e, index) => {
+          if (e.command === 'call') {
+            this.ACTIONS.splice(index, 1);
+          }
+        });
+      }
+
       this.disableActions = [];
       if (!this.isPackageAutomation) {
         this.disableActions.push({

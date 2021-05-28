@@ -164,9 +164,9 @@
                         display: none !important;
                     }
                     .i-triangle-down, .i-triangle-up {
-                        width: 8px;
-                        height: 8px;
-                        min-width: 8px;
+                        width: 8px !important;
+                        height: 8px !important;
+                        min-width: 8px !important;
                     }
                 }
                 &.show {
@@ -338,7 +338,7 @@
         padding: 0px!important;
         .form-group {
             margin-bottom: 0px;
-            padding-left: 46px;
+            padding-left: 100px;
             padding-right: 15px;
         }
         .material-button {
@@ -353,13 +353,23 @@
             border: none!important;
             position: absolute;
             top: 50%;
-            left: 24px;
+            left: 26px;
             transform: translateY(-50%);
             padding: 0.35rem;
 
             .i-icon {
                 width: 16px!important;
                 height: 16px!important;
+                min-width: 16px !important;
+            }
+            &.emoji {
+                left: 42px;
+                .emoji-icon {
+                    width: 20px !important;
+                }
+            }
+            &.token {
+                left: 66px;
             }
         }
         .send-button {
