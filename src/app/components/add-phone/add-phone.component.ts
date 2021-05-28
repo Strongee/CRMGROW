@@ -72,9 +72,7 @@ export class AddPhoneComponent implements OnInit {
     this.loading = true;
     let data;
     if (this.searchCode == '') {
-      data = {
-        searchCode: ''
-      };
+      data = {};
     } else {
       data = {
         searchCode: parseInt(this.searchCode).toString()

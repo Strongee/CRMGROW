@@ -45,6 +45,7 @@ export class VideoCreateComponent
 
   vimeoVideoMetaSubscription: Subscription;
   youtubeVideoMetaSubscription: Subscription;
+  routeChangeSubscription: Subscription;
 
   uploading = false;
   uploadTimer: any;
@@ -109,13 +110,22 @@ export class VideoCreateComponent
   }
 
   ngOnInit(): void {
-    const mode = this.route.snapshot.params['mode'];
-    this.tabs.forEach((tab) => {
-      if (tab.id == mode) {
-        this.changeTab(tab);
-      }
+    this.routeChangeSubscription = this.route.params.subscribe((params) => {
+      const mode = params['mode'];
+      this.selectedTab = this.tabs.filter((tab) => tab.id == mode)[0];
+      this.currentFolder = params['folder'];
+      this.isStep = 1;
+      this.video = new Material();
+      this.image = new Material();
+      this.pdf = new Material();
+      this.videoUploader.cancelAll();
+      this.videoUploader.clearQueue();
+      this.pdfUploader.cancelAll();
+      this.pdfUploader.clearQueue();
+      this.imageUploader.cancelAll();
+      this.imageUploader.clearQueue();
+      this.saved = true;
     });
-    this.currentFolder = this.route.snapshot.params['folder'];
     this.videoUploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
       if (this.videoUploader.queue.length > 1) {
@@ -135,7 +145,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status === 200) {
           response = JSON.parse(response);
@@ -157,7 +166,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status === 200) {
           response = JSON.parse(response);
@@ -180,7 +188,6 @@ export class VideoCreateComponent
       status: any,
       headers: any
     ) => {
-      window['confirmReload'] = false;
       try {
         if (status == 200) {
           response = JSON.parse(response);
@@ -206,18 +213,18 @@ export class VideoCreateComponent
   }
 
   changeTab(tab: TabItem): void {
-    this.selectedTab = tab;
-    this.isStep = 1;
-    this.videoUploader.cancelAll();
-    this.videoUploader.clearQueue();
-    this.pdfUploader.cancelAll();
-    this.pdfUploader.clearQueue();
-    this.imageUploader.cancelAll();
-    this.imageUploader.clearQueue();
+    if (this.currentFolder) {
+      this.router.navigate([
+        `/materials/create/${tab.id}/${this.currentFolder}`
+      ]);
+    } else {
+      this.router.navigate([`/materials/create/${tab.id}`]);
+    }
   }
 
   uploadVideo(): void {
     this.isStep++;
+    this.saved = false;
   }
 
   saveDetail(): void {
@@ -274,6 +281,7 @@ export class VideoCreateComponent
         .subscribe((res) => {
           if (res) {
             this.uploading = false;
+            this.saved = true;
             this.toast.success('Video is uploaded successfully.');
             if (this.currentFolder) {
               this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -296,7 +304,6 @@ export class VideoCreateComponent
         this.imageUploader.uploadAllFiles();
         break;
     }
-    window['confirmReload'] = true;
     this.uploadTimer = timer(0, 500);
     this.uploadTimeSubscriber = this.uploadTimer.subscribe((timer) => {
       if (this.uploaded_time < 60) {
@@ -330,6 +337,7 @@ export class VideoCreateComponent
     this.materialService.uploadVideoDetail(videoId, newVideo).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Video is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -368,6 +376,7 @@ export class VideoCreateComponent
     this.materialService.updatePdf(pdfId, newPdf).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Pdf is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
@@ -406,6 +415,7 @@ export class VideoCreateComponent
     this.materialService.updateImage(imageId, newImage).subscribe(
       (res) => {
         this.uploading = false;
+        this.saved = true;
         this.toast.success('Image is uploaded successfully.');
         if (this.currentFolder) {
           this.router.navigate([`/materials/${this.currentFolder}`]);
