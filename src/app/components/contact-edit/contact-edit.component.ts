@@ -50,6 +50,10 @@ export class ContactEditComponent implements OnInit {
   isUpdating = false;
   updateSubscription: Subscription;
   isSharedContact = false;
+  isNullFirstName = true;
+  isNullLastName = true;
+  isNullEmail = true;
+  isNullPhone = true;
 
   phoneInput: FormControl = new FormControl();
   @ViewChild('phoneControl') phoneControl: PhoneInputComponent;
@@ -88,6 +92,10 @@ export class ContactEditComponent implements OnInit {
               this.contact['user'].indexOf(userId) < 0
             ) {
               this.isSharedContact = true;
+              this.isNullFirstName = !!this.contact['first_name'];
+              this.isNullLastName = !!this.contact['last_name'];
+              this.isNullEmail = !!this.contact['email'];
+              this.isNullPhone = !!this.contact_phone;
             }
           }
         });

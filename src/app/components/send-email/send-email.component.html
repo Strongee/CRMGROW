@@ -7,8 +7,8 @@
         (click)="minimizeDialog()"
         *ngIf="dialogType == 'global'"
       >
-        <i class="i-icon i-minimize sm bgc-white" aria-hidden="true" *ngIf="isMinimizable"></i>
-        <i class="i-icon i-maximize sm bgc-white" aria-hidden="true" *ngIf="!isMinimizable"></i>
+        <i class="i-icon i-minimize sm bgc-white" aria-hidden="true" *ngIf="storeService.emailWindowType$ | async"></i>
+        <i class="i-icon i-maximize sm bgc-white" aria-hidden="true" *ngIf="!(storeService.emailWindowType$ | async)"></i>
       </button>
       <button type="button" class="v-center border-0 bgc-trans close-button"
         (click)="closeDialog()"
@@ -17,7 +17,7 @@
       </button>
     </div>
 </div>
-<div class="email-panel" [class.minimize-content]="dialogType == 'global' && !isMinimizable">
+<div class="email-panel" [class.minimize-content]="dialogType == 'global' && !(storeService.emailWindowType$ | async)">
     <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
       <div class="email-box">
         <div class="receiver pl-3 pr-2 py-1 contacts-wrapper address-wrapper">

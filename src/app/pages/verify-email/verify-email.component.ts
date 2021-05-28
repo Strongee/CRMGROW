@@ -22,23 +22,35 @@ export class VerifyEmailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    if (this.id) {
-      this.verifying = true;
-      this.userInfoSubscription && this.userInfoSubscription.unsubscribe();
-      this.userInfoSubscription = this.userService
-        .getUserInfo(this.id)
-        .subscribe((res) => {
-          if (res && res.status) {
-            const email = res['data']['email'];
-            this.userService.profile$.subscribe((user) => {
-              if (user && user.email === email) {
-                user.email_verified = true;
-                this.userService.updateProfile(user).subscribe((profile) => {
-                  this.verifying = false;
-                  if (profile) {
-                    this.toast.success('Your email is verified.');
-                    this.router.navigate(['/home']);
+    this.route.queryParams.subscribe((params) => {
+      if (params) {
+        this.id = params['id'];
+        if (this.id) {
+          this.verifying = true;
+          this.userInfoSubscription && this.userInfoSubscription.unsubscribe();
+          this.userInfoSubscription = this.userService
+            .getUserInfo(this.id)
+            .subscribe((res) => {
+              if (res && res.status) {
+                const email = res['data']['email'];
+                this.userService.profile$.subscribe((user) => {
+                  if (user && user.email === email) {
+                    user.email_verified = true;
+                    this.userService
+                      .updateProfile(user)
+                      .subscribe((profile) => {
+                        this.verifying = false;
+                        if (profile) {
+                          this.toast.success('Your email is verified.');
+                          this.router.navigate(['/home']);
+                        }
+                      });
+                  } else {
+                    this.verifying = false;
+                    this.toast.error(
+                      'Your email is not verified. Please contact us with Support Team'
+                    );
+                    this.router.navigate(['/']);
                   }
                 });
               } else {
@@ -46,16 +58,11 @@ export class VerifyEmailComponent implements OnInit {
                 this.toast.error(
                   'Your email is not verified. Please contact us with Support Team'
                 );
-
+                this.router.navigate(['/']);
               }
             });
-          } else {
-            this.verifying = false;
-            this.toast.error(
-              'Your email is not verified. Please contact us with Support Team'
-            );
-          }
-        });
-    }
+        }
+      }
+    });
   }
 }
