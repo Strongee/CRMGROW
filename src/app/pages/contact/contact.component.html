@@ -53,9 +53,9 @@
             <i class="d-block i-icon i-triangle-down more-icon bgc-white ml-2"></i>
           </div>
           <div ngbDropdownMenu class="light action-menu">
-            <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
+            <!-- <button class="border-0 c-dark dropdown-item" (click)="openGroupCallDlg()">
               <span class="ml-1 f-3 font-weight-bold">Create group call</span>
-            </button>
+            </button> -->
             <button class="v-center border-0 c-dark dropdown-item my-1"
               [class.disable]="!isPackageAutomation"
               (click)="openAppointmentDlg()"
@@ -75,10 +75,10 @@
               <i class="i-icon i-sms-sent bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Text</span>
             </button>
-            <!-- <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
+            <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openCall()">
               <i class="i-icon i-phone bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Call</span>
-            </button>  -->
+            </button> 
             <button class="v-center border-0 c-dark dropdown-item my-1" (click)="openTaskDlg()">
               <i class="i-icon i-task bgc-dark"></i>
               <span class="ml-2 f-3 font-weight-bold">New Task</span>
