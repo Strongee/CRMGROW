@@ -13,6 +13,7 @@ import { ContactService } from 'src/app/services/contact.service';
 import { StoreService } from 'src/app/services/store.service';
 import { SearchOption } from 'src/app/models/searchOption.model';
 import { UserService } from '../../services/user.service';
+import { DealsService } from '../../services/deals.service';
 import * as _ from 'lodash';
 import { saveAs } from 'file-saver';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -47,9 +48,9 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'select',
     'contact_name',
     'contact_label',
-    'contact_stage',
     'activity',
     'contact_tags',
+    'contact_stages',
     'contact_email',
     'contact_phone',
     'contact_address'
@@ -58,10 +59,10 @@ export class ContactsComponent implements OnInit, OnDestroy {
     'select',
     'contact_name',
     'contact_label',
-    'contact_stage',
     'activity',
     'activity_added',
     'contact_tags',
+    'contact_stages',
     'contact_email',
     'contact_phone',
     'contact_address'
@@ -101,10 +102,13 @@ export class ContactsComponent implements OnInit, OnDestroy {
   isUpdating = false;
   updateSubscription: Subscription;
   profileSubscription: Subscription;
+  dealsSubscription: Subscription;
   disableActions = [];
   isPackageGroupEmail = true;
   isPackageText = true;
   isPackageAutomation = true;
+
+  deals = [];
 
   constructor(
     public router: Router,
@@ -112,6 +116,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     public storeService: StoreService,
     public contactService: ContactService,
     public userService: UserService,
+    public dealsService: DealsService,
     private handlerService: HandlerService,
     private dialog: MatDialog,
     private toast: ToastrService
@@ -121,6 +126,14 @@ export class ContactsComponent implements OnInit, OnDestroy {
       this.isPackageAutomation = res.automation_info?.is_enabled;
       this.isPackageGroupEmail = res.email_info?.mass_enable;
       this.isPackageText = res.text_info?.is_enabled;
+
+      if (res && res._id && res._id !== '6035a9da27952a3187d07276') {
+        this.ACTIONS.some((e, index) => {
+          if (e.command === 'call') {
+            this.ACTIONS.splice(index, 1);
+          }
+        });
+      }
 
       this.disableActions = [];
       if (!this.isPackageAutomation) {
@@ -150,11 +163,34 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.handlerService.pageName.next('contacts');
-
     const pageSize = this.contactService.pageSize.getValue();
     this.pageSize = { id: pageSize, label: pageSize + '' };
-
+    this.dealsService.getStageWithContact().subscribe((res) => {
+      this.deals = res;
+    });
     this.storeService.pageContacts$.subscribe((contacts) => {
+      for (let i = 0; i < contacts.length; i++) {
+        contacts[i].stages = [];
+        for (let j = 0; j < this.deals.length; j++) {
+          if (this.deals[j].deals) {
+            //if this stage has deals
+            for (let k = 0; k < this.deals[j].deals.length; k++) {
+              if (this.deals[j].deals[k].contacts) {
+                //if this deal has contacts.
+                for (
+                  let m = 0;
+                  m < this.deals[j].deals[k].contacts.length;
+                  m++
+                ) {
+                  if (contacts[i]._id === this.deals[j].deals[k].contacts[m]) {
+                    contacts[i].stages.push(this.deals[j].title);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       if (!this.searchStr && this.searchOption.isEmpty()) {
         this.pageContacts = contacts;
         this.pageSelection = _.intersectionBy(

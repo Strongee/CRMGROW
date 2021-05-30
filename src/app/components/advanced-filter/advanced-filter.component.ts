@@ -495,6 +495,14 @@ export class AdvancedFilterComponent implements OnInit, OnDestroy {
           );
         }
         break;
+      case 'stage':
+        this.searchOption.includeStage = !this.searchOption.includeStage;
+        if (this.searchOption.stagesCondition.length) {
+          this.contactService.searchOption.next(
+            new SearchOption().deserialize(this.searchOption)
+          );
+        }
+        break;
     }
   }
 

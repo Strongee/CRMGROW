@@ -27,6 +27,7 @@ import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { SendTextComponent } from 'src/app/components/send-text/send-text.component';
 import { filter, map } from 'rxjs/operators';
+import {StoreService} from "../../services/store.service";
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -37,7 +38,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
     { icon: 'i-message bg-white', label: 'New Email', id: 'message' },
-    { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
+    // { icon: 'i-phone bg-white', label: 'New Call', id: 'call' },
     { icon: 'i-task bg-white', label: 'New Task', id: 'task' },
     { icon: 'i-deals bg-white', label: 'New Deal', id: 'deal' },
     {
@@ -101,7 +102,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private contactService: ContactService,
     private toast: ToastrService,
-    private router: Router
+    private router: Router,
+    private storeService: StoreService
   ) {
     this.profileSubscription = this.userService.profile$.subscribe(
       (profile) => {
@@ -184,19 +186,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
       case 'appointment':
         break;
       case 'message':
-        this.emailDialog = this.dialog.open(SendEmailComponent, {
-          position: {
-            bottom: '0px',
-            right: '0px'
-          },
-          width: '100vw',
-          panelClass: 'send-email',
-          backdropClass: 'cdk-send-email',
-          disableClose: true,
-          data: {
-            type: 'global'
-          }
-        });
+        this.storeService.emailWindowType.next(true);
+        if (!this.emailDialog) {
+          this.emailDialog = this.dialog.open(SendEmailComponent, {
+            position: {
+              bottom: '0px',
+              right: '0px'
+            },
+            width: '100vw',
+            panelClass: 'send-email',
+            backdropClass: 'cdk-send-email',
+            disableClose: true,
+            data: {
+              type: 'global'
+            }
+          });
+          this.emailDialog.afterClosed().subscribe((res) => {
+            this.emailDialog = null;
+          });
+        }
         break;
       case 'record':
         if (this.dialog.openDialogs.length > 0) {

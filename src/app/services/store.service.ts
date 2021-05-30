@@ -46,6 +46,8 @@ export class StoreService {
   images$ = this.images.asObservable();
   materials$ = this.materials.asObservable();
   templates$ = this.templates.asObservable();
+  emailWindowType: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  emailWindowType$ = this.emailWindowType.asObservable();
 
   sharedMaterials: BehaviorSubject<Material[]> = new BehaviorSubject([]);
   sharedMaterials$ = this.sharedMaterials.asObservable();

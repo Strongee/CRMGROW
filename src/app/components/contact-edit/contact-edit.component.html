@@ -19,7 +19,7 @@
                  required name="first_name"
                  #first_name="ngModel"
                  [(ngModel)]="contact.first_name"
-                 [class.disabled]="isSharedContact && !!contact.first_name"
+                 [class.disabled]="isSharedContact && isNullFirstName"
           />
           <span class="error" *ngIf="first_name.errors">
             <ng-container *ngIf="first_name.errors.required">First name is required!</ng-container>
@@ -33,7 +33,7 @@
                  name="last_name"
                  #last_name="ngModel"
                  [(ngModel)]="contact.last_name"
-                 [class.disabled]="isSharedContact && !!contact.last_name"
+                 [class.disabled]="isSharedContact && isNullLastName"
           />
         </div>
       </div>
@@ -45,7 +45,7 @@
               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$"
               #email="ngModel"
               (ngModelChange)="checkEmailDuplicate($event)"
-              [class.disabled]="isSharedContact && !!contact.email"
+              [class.disabled]="isSharedContact && isNullEmail"
           />
             <span class="form-append-icon c-pointer" (click)="toggleSameEmails()" *ngIf="sameEmailContacts.length">
               <i class="d-block i-icon i-close bgc-dark" *ngIf="sameEmailsFlag"></i>
@@ -81,7 +81,7 @@
             name="phone"
             #phoneControl
             [disabled]="isSharedContact && contact_phone"
-            [class.disabled]="isSharedContact && contact_phone"
+            [class.disabled]="isSharedContact && isNullPhone"
           >
           </app-phone-input>
           <span class="error d-block mt-1" *ngIf="phoneControl && contact_phone && !phoneControl.valid">
