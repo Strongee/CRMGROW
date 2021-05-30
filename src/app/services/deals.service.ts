@@ -346,4 +346,13 @@ export class DealsService extends HttpService {
       catchError(this.handleError('SEND DEAL TEXT', false))
     );
   }
+
+  getStageWithContact(): Observable<any> {
+    return this.httpClient.get(this.server + DEALSTAGE.WITHCONTACT).pipe(
+      map((res) => {
+        return res['data'];
+      }),
+      catchError(this.handleError('GET STAGE WITH CONTACT', false))
+    );
+  }
 }

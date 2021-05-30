@@ -157,7 +157,7 @@ export class ContactActivity implements Deserializable {
   }
 
   get moreTag(): string {
-    if (this.tags.length > 1) {
+    if (this.tags?.length > 1) {
       return '+' + (this.tags.length - 1) + ' more';
     }
     return '';
@@ -165,7 +165,7 @@ export class ContactActivity implements Deserializable {
 
   get moreStage(): string {
     if (this.stages?.length > 1) {
-      return '+' + (this.stages?.length - 1) + ' more';
+      return '+' + (this.stages.length - 1) + ' more';
     }
     return '';
   }
