@@ -3,21 +3,26 @@
         Email
     </h1>
     <div class="v-center">
-      <button type="button" class="v-center border-0 bgc-trans close-button px-0"
-        (click)="minimizeDialog()"
-        *ngIf="dialogType == 'global'"
-      >
-        <i class="i-icon i-minimize sm bgc-white" aria-hidden="true" *ngIf="isMinimizable"></i>
-        <i class="i-icon i-maximize sm bgc-white" aria-hidden="true" *ngIf="!isMinimizable"></i>
-      </button>
-      <button type="button" class="v-center border-0 bgc-trans close-button"
-        (click)="closeDialog()"
-      >
+      <ng-container *ngIf="dialogType == 'global'; else subWindow">
+        <button type="button" class="v-center border-0 bgc-trans close-button px-0" (click)="minimizeDialog()">
+          <i class="i-icon i-minimize sm bgc-white" aria-hidden="true" *ngIf="storeService.emailWindowType$ | async"></i>
+          <i class="i-icon i-maximize sm bgc-white" aria-hidden="true" *ngIf="!(storeService.emailWindowType$ | async)"></i>
+        </button>
+      </ng-container>
+      <ng-template #subWindow>
+        <button type="button" class="v-center border-0 bgc-trans close-button px-0" (click)="minimizeDialog()">
+          <i class="i-icon i-minimize sm bgc-white" aria-hidden="true" *ngIf="isMinimizable"></i>
+          <i class="i-icon i-maximize sm bgc-white" aria-hidden="true" *ngIf="!isMinimizable"></i>
+        </button>
+      </ng-template>
+      <button type="button" class="v-center border-0 bgc-trans close-button" (click)="closeDialog()">
         <i class="i-icon i-close bgc-white" aria-hidden="true"></i>
       </button>
     </div>
 </div>
-<div class="email-panel" [class.minimize-content]="dialogType == 'global' && !isMinimizable">
+<div class="email-panel"
+     [class.minimize-content]="dialogType == 'global' ? !(storeService.emailWindowType$ | async) : !isMinimizable"
+>
     <form #emailForm="ngForm" (ngSubmit)="emailSubmitted = true; emailForm.form.valid ? sendEmail() : false">
       <div class="email-box">
         <div class="receiver pl-3 pr-2 py-1 contacts-wrapper address-wrapper">
