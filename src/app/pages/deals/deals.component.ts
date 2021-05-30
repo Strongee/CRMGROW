@@ -29,9 +29,7 @@ export class DealsComponent implements OnInit, OnDestroy {
   ) {
     this.dealsService.getStage(true);
     this.loadSubscription && this.loadSubscription.unsubscribe();
-    this.loadSubscription = this.dealsService.stages$.subscribe((res) => {
-      console.log('stage', res);
-    });
+    this.loadSubscription = this.dealsService.stages$.subscribe((res) => {});
   }
 
   ngOnInit(): void {}
