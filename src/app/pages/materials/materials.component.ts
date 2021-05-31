@@ -1903,17 +1903,24 @@ export class MaterialsComponent implements OnInit, AfterViewInit {
   }
 
   goToMaterial(id: string): void {
-    const el = this.myElement.nativeElement.querySelector(
-      '#material-video-' + id
-    );
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('focus');
-      setTimeout(() => {
-        if (el) {
-          el.classList.remove('focus');
-        }
-      }, 3000);
-    }
+    const index = _.findIndex(this.filteredMaterials, function (e) {
+      return e._id == id;
+    });
+    const page = Math.ceil((index + this.folders.length) / this.pageSize.id);
+    this.changePage(page);
+    setTimeout(() => {
+      const el = this.myElement.nativeElement.querySelector(
+        '#material-video-' + id
+      );
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('focus');
+        setTimeout(() => {
+          if (el) {
+            el.classList.remove('focus');
+          }
+        }, 2000);
+      }
+    }, 2000);
   }
 }
