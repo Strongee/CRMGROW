@@ -23,6 +23,10 @@ export class NotificationsComponent implements OnInit {
       id: 'email'
     },
     {
+      label: 'email link clicked',
+      id: 'link_clicked'
+    },
+    {
       label: 'follow up',
       id: 'follow_up'
     },
