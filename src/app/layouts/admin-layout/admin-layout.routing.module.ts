@@ -322,7 +322,7 @@ export const AdminLayoutRoutes: Routes = [
     component: TestComponent
   },
   {
-    path: 'verify-email/:id',
+    path: 'verify-email',
     component: VerifyEmailComponent,
     data: {
       title: 'Verify Email'

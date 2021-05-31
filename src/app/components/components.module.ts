@@ -163,7 +163,7 @@ import { StopShareContactComponent } from './stop-share-contact/stop-share-conta
 import { VideoPopupComponent } from './video-popup/video-popup.component';
 import { MessageFilesComponent } from './message-files/message-files.component';
 import { ConnectNewCalendarComponent } from './connect-new-calendar/connect-new-calendar.component';
-
+import { InputStageComponent } from './input-stage/input-stage.component';
 @NgModule({
   declarations: [
     TopbarComponent,
@@ -323,7 +323,8 @@ import { ConnectNewCalendarComponent } from './connect-new-calendar/connect-new-
     VideoPopupComponent,
     InputContactDealComponent,
     MessageFilesComponent,
-    ConnectNewCalendarComponent
+    ConnectNewCalendarComponent,
+    InputStageComponent
   ],
   imports: [
     CommonModule,

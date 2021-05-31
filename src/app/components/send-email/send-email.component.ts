@@ -29,6 +29,7 @@ import { ConnectService } from 'src/app/services/connect.service';
 import { StripTagsPipe } from 'ngx-pipes';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { ToastrService } from 'ngx-toastr';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-send-email',
@@ -89,6 +90,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private connectService: ConnectService,
     private toast: ToastrService,
     private stripTags: StripTagsPipe,
+    public storeService: StoreService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
     if (this.data && this.data.deal) {
@@ -480,7 +482,12 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
   }
 
   minimizeDialog(): void {
-    this.isMinimizable = !this.isMinimizable;
+    if (this.dialogType === 'global') {
+      const windowType = this.storeService.emailWindowType.getValue();
+      this.storeService.emailWindowType.next(!windowType);
+    } else {
+      this.isMinimizable = !this.isMinimizable;
+    }
   }
 
   saveInitValue(): void {
@@ -529,6 +536,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     }
     return false;
   }
+
   closeDialog(): void {
     if (this.dialogType === 'global') {
       if (this.checkModified()) {

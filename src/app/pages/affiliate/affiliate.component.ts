@@ -53,8 +53,8 @@ export class AffiliateComponent implements OnInit {
         (res) => {
           this.loadingUsers = false;
           this.userPage = page;
-          // const pagination = res['pagination'];
-          // this.userCount = pagination['total_count'];
+          const pagination = res['pagination'];
+          this.userCount = pagination['total_count'];
           this.userCount = res.data.length;
           this.users = [];
           res.data.forEach((e) => {

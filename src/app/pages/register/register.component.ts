@@ -299,6 +299,9 @@ export class RegisterComponent implements OnInit {
     if (window['Rewardful'] && window['Rewardful'].affiliate) {
       this.user['parent_affiliate'] = window['Rewardful'].affiliate;
     }
+    if (window['Rewardful'] && window['Rewardful'].referral) {
+      this.user['referral'] = window['Rewardful'].referral;
+    }
     if (this.isSocialUser) {
       this.userService.socialSignUp(this.user).subscribe((res) => {
         if (res && res.status) {

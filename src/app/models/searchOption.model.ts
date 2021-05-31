@@ -143,6 +143,7 @@ export class SearchOption implements Deserializable {
       !this.cityCondition.length &&
       !this.zipcodeCondition &&
       !this.tagsCondition.length &&
+      !this.stagesCondition.length &&
       !this.brokerageCondition.length &&
       !this.activityCondition.length &&
       !this.sourceCondition.length &&
