@@ -10,10 +10,12 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Contact } from 'src/app/models/contact.model';
 import { Template } from 'src/app/models/template.model';
 import { DealsService } from 'src/app/services/deals.service';
+import { HandlerService } from 'src/app/services/handler.service';
 import { TemplatesService } from 'src/app/services/templates.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
@@ -39,9 +41,11 @@ export class SendBulkTextComponent implements OnInit {
     private dialogRef: MatDialogRef<SendBulkTextComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
+    private toast: ToastrService,
     public templateService: TemplatesService,
     private dealService: DealsService,
-    public userService: UserService
+    public userService: UserService,
+    private handlerService: HandlerService
   ) {}
 
   ngOnInit(): void {
@@ -200,6 +204,22 @@ export class SendBulkTextComponent implements OnInit {
       })
       .subscribe((res) => {
         this.sending = false;
+        if (res['status']) {
+          if (contacts.length > 1) {
+            this.toast.success(
+              'Your texts would be delivered. You can see all delivering status in header within 5 mins',
+              'Text Sent'
+            );
+          } else {
+            this.toast.success(
+              'Your text is delivered successfully.',
+              'Text Sent'
+            );
+          }
+        }
+        if (contacts.length > 1) {
+          this.handlerService.updateQueueTasks();
+        }
         this.dialogRef.close({
           status: true,
           count: videoIds.length + pdfIds.length + imageIds.length + 1

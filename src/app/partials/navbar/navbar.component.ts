@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -33,7 +34,7 @@ import {StoreService} from "../../services/store.service";
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   actions: any[] = [
     { icon: 'i-contact bg-white', label: 'New Contact', id: 'contact' },
     { icon: 'i-sms-sent bg-white', label: 'New Text', id: 'text' },
@@ -62,6 +63,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   user_id = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('emailProgress') emailProgress: ElementRef;
+  @ViewChild('textProgress') textProgress: ElementRef;
   isSuspended = false;
   isPackageText = true;
   isPackageAutomation = true;
@@ -71,6 +74,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationUpdater$;
   notificationUpdater: Subscription;
   notificationLoadSubscription: Subscription;
+  notificationBarResetSubscription: Subscription;
   systemNotifications = [];
   emailTasks = [];
   textTasks = [];
@@ -123,13 +127,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       }
     );
-
-    this.loadNotifications();
-    this.notificationUpdater$ = interval(60 * 1000);
-    this.notificationUpdater && this.notificationUpdater.unsubscribe();
-    this.notificationUpdater = this.notificationUpdater$.subscribe(() => {
-      this.loadNotifications();
-    });
   }
 
   ngOnInit(): void {
@@ -140,8 +137,26 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.notificationBarResetSubscription &&
+      this.notificationBarResetSubscription.unsubscribe();
     this.notificationUpdater && this.notificationUpdater.unsubscribe();
     this.latestAt = null;
+  }
+
+  ngAfterViewInit(): void {
+    this.notificationUpdater$ = interval(60 * 1000);
+    this.notificationBarResetSubscription &&
+      this.notificationBarResetSubscription.unsubscribe();
+    this.notificationBarResetSubscription = this.handlerService.updaterTime$.subscribe(
+      () => {
+        this.resetProgressUI();
+        this.loadNotifications();
+        this.notificationUpdater && this.notificationUpdater.unsubscribe();
+        this.notificationUpdater = this.notificationUpdater$.subscribe(() => {
+          this.loadNotifications();
+        });
+      }
+    );
   }
 
   runAction(action: string): void {
@@ -318,6 +333,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
 
           this.emailTasks = res['emails'] || [];
+          let eTotalContacts = 0;
+          let eExecutedContacts = 0;
           if (this.emailTasks && this.emailTasks.length) {
             this.emailTasks.forEach((e) => {
               let failed = 0;
@@ -332,13 +349,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
                       _task.contacts.length - _task.exec_result.failed.length;
                   }
                 }
+                eTotalContacts += _task.contacts ? _task.contacts.length : 0;
               });
               e.failed = failed;
               e.succeed = succeed;
+              eExecutedContacts += e.failed + e.succeed;
             });
           }
+          this.updateEmailProgress(eTotalContacts, eExecutedContacts);
 
           this.textTasks = res['texts'] || [];
+          let tTotalContacts = 0;
+          let tExecutedContacts = 0;
           if (this.textTasks && this.textTasks.length) {
             this.textTasks.forEach((e) => {
               let failed = 0;
@@ -352,12 +374,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
                 } else {
                   failed++;
                 }
+                tTotalContacts += _task.contacts ? _task.contacts.length : 0;
               });
               e.failed = failed;
               e.succeed = succeed;
               e.awaiting = awaiting;
+              tExecutedContacts += failed + succeed;
             });
           }
+          this.updateTextProgress(tTotalContacts, tExecutedContacts);
 
           this.unreadMessageCount = res['unread'];
           this.unreadMessages = res['unreadMessages'];
@@ -395,28 +420,41 @@ export class NavbarComponent implements OnInit, OnDestroy {
               let counter = 0;
               this.materialTrackingShower = setInterval(() => {
                 if (counter < trackerNotifications.length) {
-                  this.toast.success(
+                  this.toast.info(
                     trackerNotifications[counter].content,
                     'Material is tracked',
-                    { enableHtml: true }
+                    { enableHtml: true, timeOut: 6000 }
                   );
                 } else {
                   clearInterval(this.materialTrackingShower);
                 }
                 counter++;
-              }, 5000);
+              }, 7000);
             }
             if (
               this.incomingNotifications.length - trackerNotifications.length
             ) {
-              this.toast.success(
-                `${
-                  this.incomingNotifications.length -
-                  trackerNotifications.length
-                } event is happend newly.`,
-                'Notification',
-                { timeOut: 3500 }
+              const anotherNotifications = this.incomingNotifications.filter(
+                (e) => {
+                  return e.criteria !== 'material_track';
+                }
               );
+              if (anotherNotifications.length > 1) {
+                this.toast.success(
+                  `${
+                    this.incomingNotifications.length -
+                    trackerNotifications.length
+                  } event is happend newly.`,
+                  'Notification',
+                  { timeOut: 3500 }
+                );
+              } else {
+                this.toast.success(
+                  anotherNotifications[0].content,
+                  'Notification',
+                  { timeOut: 3500, enableHtml: true }
+                );
+              }
             }
           }
           if (latest) {
@@ -424,6 +462,66 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  resetProgressUI(): void {
+    const textProgressEl = <HTMLElement>this.textProgress.nativeElement;
+    const emailProgressEl = <HTMLElement>this.emailProgress.nativeElement;
+    if (textProgressEl) {
+      const textThumb = textProgressEl.querySelector('.c-thumb');
+      if (textThumb) {
+        textThumb.classList.remove('animate');
+        setTimeout(() => {
+          textThumb.classList.add('animate');
+        }, 100);
+      }
+    }
+    if (emailProgressEl) {
+      const emailThumb = emailProgressEl.querySelector('.c-thumb');
+      if (emailThumb) {
+        emailThumb.classList.remove('animate');
+        setTimeout(() => {
+          emailThumb.classList.add('animate');
+        }, 100);
+      }
+    }
+  }
+  updateEmailProgress(total, progressed): void {
+    console.log("total, progressed", total, progressed);
+    let percent = 0;
+    try {
+      percent = progressed / (total || 1);
+    } catch (err) {
+      percent = 0;
+    }
+    console.log('percent', percent);
+    const stroke = -250 - percent * 100;
+    const progressEl = <HTMLElement>this.emailProgress.nativeElement;
+    if (progressEl) {
+      const track = <HTMLElement>progressEl.querySelector('.c-track');
+      if (track) {
+        console.log('stroke', stroke);
+        track.style.strokeDashoffset = stroke + '';
+      }
+    }
+  }
+  updateTextProgress(total, progressed): void {
+    let percent = 0;
+    try {
+      percent = progressed / (total || 1);
+    } catch (err) {
+      percent = 0;
+    }
+    console.log('percent', percent);
+    const stroke = -250 - percent * 100;
+    const progressEl = <HTMLElement>this.textProgress.nativeElement;
+    if (progressEl) {
+      const track = <HTMLElement>progressEl.querySelector('.c-track');
+      if (track) {
+        console.log('stroke', stroke);
+        track.style.strokeDashoffset = stroke + '';
+      }
+    }
   }
 
   isDisableAction(action): boolean {

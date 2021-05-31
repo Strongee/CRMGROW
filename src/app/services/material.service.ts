@@ -188,10 +188,10 @@ export class MaterialService extends HttpService {
     return this.httpClient.delete(this.server + IMAGE.DELETE + id);
   }
 
-  sendMaterials(data: any): Observable<boolean> {
+  sendMaterials(data: any): Observable<any> {
     return this.httpClient.post(this.server + MATERIAL.EMAIL, data).pipe(
-      map((res) => res['status']),
-      catchError(this.handleError('SEND MATERIALS', false))
+      map((res) => res),
+      catchError(this.handleError('SEND MATERIALS', false, true))
     );
   }
 

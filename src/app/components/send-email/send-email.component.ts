@@ -17,7 +17,7 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import * as _ from 'lodash';
-import { TIMES } from 'src/app/constants/variable.constants';
+import { TIMES, CHUNK_SIZE } from 'src/app/constants/variable.constants';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
 import { DealsService } from '../../services/deals.service';
@@ -28,6 +28,7 @@ import { Garbage } from 'src/app/models/garbage.model';
 import { ConnectService } from 'src/app/services/connect.service';
 import { StripTagsPipe } from 'ngx-pipes';
 import { ConfirmComponent } from '../confirm/confirm.component';
+import { ToastrService } from 'ngx-toastr';
 import { StoreService } from '../../services/store.service';
 
 @Component({
@@ -87,6 +88,7 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
     private handlerService: HandlerService,
     private dealService: DealsService,
     private connectService: ConnectService,
+    private toast: ToastrService,
     private stripTags: StripTagsPipe,
     public storeService: StoreService,
     @Inject(MAT_DIALOG_DATA) private data: any
@@ -195,9 +197,63 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
             deal: this.dealId,
             ...data
           })
-          .subscribe((status) => {
+          .subscribe((res) => {
             this.emailSending = false;
-            this.dialogRef.close(status);
+            if (res['status']) {
+              if (res['message'] === 'all_queue') {
+                // toastr display, call status setting update
+                this.toast.info(
+                  'Your email requests are queued. The email queue progressing would be displayed in the header.',
+                  'Email Queue'
+                );
+              } else {
+                if (contacts.length > CHUNK_SIZE) {
+                  this.toast.success(
+                    `${CHUNK_SIZE} emails are sent successfully. ${
+                      contacts.length - CHUNK_SIZE
+                    } emails are queued. The email queue progressing would be displayed in the header.`,
+                    'Email Sent'
+                  );
+                } else {
+                  // toastr display
+                  this.toast.success(
+                    'Your emails are sent successfully.',
+                    'Email Sent'
+                  );
+                }
+              }
+            } else if (res.statusCode === 405) {
+              let failed = res.error && res.error.length;
+              failed += res.notExecuted && res.notExecuted.length;
+              if (failed < contacts.length) {
+                let message = '';
+                if (contacts.length > CHUNK_SIZE) {
+                  if (failed < CHUNK_SIZE) {
+                    message = `${failed} emails are failed. ${
+                      CHUNK_SIZE - failed
+                    } are succeed. Rest email requests are queued. The email queue progressing would be displayed in the header.`;
+                  } else {
+                    message = `${failed} emails are failed. Rest email requests are queued. The email queue progressing would be displayed in the header.`;
+                  }
+                } else {
+                  // call status setting update && toast display
+                  message = `${failed} emails are failed. ${
+                    CHUNK_SIZE - failed
+                  } are succeed.`;
+                }
+                this.toast.warning(message, 'Email Sent');
+              }
+            }
+            const length =
+              (data.video_ids ? data.video_ids.length : 0) +
+              (data.pdf_ids ? data.pdf_ids.length : 0) +
+              (data.image_ids ? data.image_ids.length : 0) +
+              1;
+            this.handlerService.addLatestActivities$(length);
+            if (contacts.length > CHUNK_SIZE) {
+              this.handlerService.updateQueueTasks();
+            }
+            this.dialogRef.close(true);
           });
       } else {
         this.emailSending = true;
@@ -205,15 +261,65 @@ export class SendEmailComponent implements OnInit, AfterViewInit {
           .sendMaterials({
             ...data
           })
-          .subscribe((status) => {
+          .subscribe((res) => {
             this.emailSending = false;
+            if (res['status']) {
+              if (res['message'] === 'all_queue') {
+                // toastr display, call status setting update
+                this.toast.info(
+                  'Your email requests are queued. The email queue progressing would be displayed in the header.',
+                  'Email Queue'
+                );
+              } else {
+                if (contacts.length > CHUNK_SIZE) {
+                  this.toast.success(
+                    `${CHUNK_SIZE} emails are sent successfully. ${
+                      contacts.length - CHUNK_SIZE
+                    } emails are queued. The email queue progressing would be displayed in the header.`,
+                    'Email Sent'
+                  );
+                } else {
+                  // toastr display
+                  this.toast.success(
+                    'Your emails are sent successfully.',
+                    'Email Sent'
+                  );
+                }
+              }
+            } else if (res.statusCode === 405) {
+              let failed = res.error && res.error.length;
+              failed += res.notExecuted && res.notExecuted.length;
+              if (failed < contacts.length) {
+                let message = '';
+                if (contacts.length > CHUNK_SIZE) {
+                  if (failed < CHUNK_SIZE) {
+                    message = `${failed} emails are failed. ${
+                      CHUNK_SIZE - failed
+                    } are succeed. Rest email requests are queued. The email queue progressing would be displayed in the header.`;
+                  } else {
+                    message = `${failed} emails are failed. Rest email requests are queued. The email queue progressing would be displayed in the header.`;
+                  }
+                } else {
+                  // call status setting update && toast display
+                  message = `${failed} emails are failed. ${
+                    CHUNK_SIZE - failed
+                  } are succeed.`;
+                }
+                this.toast.warning(message, 'Email Sent');
+              }
+            }
             const length =
               (data.video_ids ? data.video_ids.length : 0) +
               (data.pdf_ids ? data.pdf_ids.length : 0) +
               (data.image_ids ? data.image_ids.length : 0) +
               1;
             this.handlerService.addLatestActivities$(length);
-            this.dialogRef.close();
+            if (contacts.length > CHUNK_SIZE) {
+              this.handlerService.updateQueueTasks();
+            }
+            if (res['status']) {
+              this.dialogRef.close();
+            }
           });
       }
     }

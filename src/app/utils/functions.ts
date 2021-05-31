@@ -410,7 +410,7 @@ export function getNotificationDetail(notification): string {
       }
       if (notification.action && notification.video_tracker) {
         const duration = Math.round(notification.video_tracker.duration / 1000);
-        detail = `for ${duration}s`;
+        detail = `for ${getDuration(duration * 1000)}`;
       } else {
         detail = '';
       }
@@ -429,6 +429,33 @@ export function getNotificationDetail(notification): string {
       break;
   }
   return content;
+}
+
+export function getDuration(value): string {
+  let input = 0;
+  try {
+    input = parseInt(value);
+  } catch (err) {
+    return '';
+  }
+  if (isNaN(input)) {
+    return '';
+  }
+  if (input < 0) {
+    input = 0;
+  }
+  const dateObj = new Date(input);
+  const hours = dateObj.getUTCHours();
+  const hourString = hours.toString();
+  const minutes = dateObj.getUTCMinutes().toString();
+  const seconds = dateObj.getSeconds().toString().padStart(2, '0');
+  if (hours) {
+    const timeString =
+      hourString + ':' + minutes.padStart(2, '0') + ':' + seconds;
+    return timeString;
+  } else {
+    return minutes + ':' + seconds;
+  }
 }
 
 export function isEmptyHtml(html): boolean {

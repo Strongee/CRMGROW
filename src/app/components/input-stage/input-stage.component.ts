@@ -1,4 +1,4 @@
-import { DealStage } from './../../models/deal-stage.model';
+
 import {
   Component,
   OnInit,
@@ -29,6 +29,7 @@ import * as _ from 'lodash';
 import { DealsService } from 'src/app/services/deals.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { searchReg } from 'src/app/helper';
+import { DealStage } from './../../models/deal-stage.model';
 
 interface Stage {
   _id: string;
@@ -42,7 +43,7 @@ interface Stage {
 })
 export class InputStageComponent implements OnInit {
   separatorKeyCodes: number[] = [ENTER, COMMA];
-  STATES = [];
+  STATES: DealStage[] = [];
   keyword = '';
   searching = false;
   addOnBlur = false;

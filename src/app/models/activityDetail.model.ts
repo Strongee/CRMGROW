@@ -19,6 +19,7 @@ export class PureActivity implements Deserializable {
   texts: string;
   sms: string;
   contacts: string;
+  users: string;
   material_last: number;
   full_watched: boolean;
   send_type: number;

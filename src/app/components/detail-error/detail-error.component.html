@@ -42,6 +42,9 @@
           Your request is failed for some contacts. Please check the detail reason.
         </p>
         <ul class="p-0 f-3 mb-0 detail-list">
+          <li class="mb-2" *ngIf="data.error?.notExecuted && data.error?.notExecuted?.length">
+            We couldn't perform the action for {{data.error?.notExecuted?.length}} contact(s) because of following errors.
+          </li>
           <li class="member mb-1" *ngFor="let error of data.error.error">
             <div class="name font-weight-bold">
               {{error['contact'] && error['contact']['first_name']}} {{error['contact'] && error['contact']['last_name']}}

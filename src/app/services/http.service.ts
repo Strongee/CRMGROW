@@ -11,13 +11,21 @@ export class HttpService {
   public server = environment.api;
   constructor(private errorService: ErrorService) {}
 
-  handleError<T>(operation = 'Server Connection', result?: T) {
+  handleError<T>(
+    operation = 'Server Connection',
+    result?: T,
+    returnError = false
+  ) {
     return (error: any): Observable<T> => {
       // error message add to the Error Service
       this.errorService.addError(operation, error);
       // Inspect the error
       // default data observable
-      return of(result as T);
+      if (returnError) {
+        return of({ ...error.error, statusCode: error.status } as T);
+      } else {
+        return of(result as T);
+      }
       // TODO: return the error object to show the error result
     };
   }
