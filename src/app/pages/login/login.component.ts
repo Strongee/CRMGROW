@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit {
     }
   };
   msalInstance = new UserAgentApplication(this.msalConfig);
+
+  @ViewChild('serverFrame') serverWindow: ElementRef;
 
   constructor(
     private userService: UserService,

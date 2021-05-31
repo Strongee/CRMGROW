@@ -131,7 +131,21 @@
             *matCellDef="let element"
             (click)="openContact(element)">
             <div class="v-center c-pointer">
-              <div class="contact-avatar f-3 mr-2">{{element.avatarName}}</div>
+              <div class="contact-avatar f-3 mr-2">
+                {{element.avatarName}}
+                <ng-container *ngIf="element.shared_members && element.shared_members.length">
+                  <ng-container *ngIf="userId && userId !== element.user && userId !== element.user[0]; else sharedBy">
+                    <span class="shared-with">
+                      <i class="i-icon i-shared-with d-block bgc-green"></i>
+                    </span>
+                  </ng-container>
+                  <ng-template #sharedBy>
+                    <span class="shared-by">
+                      <i class="i-icon i-shared-by d-block bgc-red"></i>
+                    </span>
+                  </ng-template>
+                </ng-container>
+              </div>
               <span class="fw-600">{{element.fullName}}</span>
             </div>
           </td>

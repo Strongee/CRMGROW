@@ -91,3 +91,22 @@ tr.mat-row {
   width: 75px;
   font-size: 12px;
 }
+
+.contact-avatar {
+  position: relative;
+}
+.shared-by, .shared-with {
+  position: absolute;
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: transparent;
+    border-radius: 10px;
+    bottom: -6px;
+    right: -6px;
+
+    .i-icon {
+      width: 22px;
+      height: 22px;
+    }
+}

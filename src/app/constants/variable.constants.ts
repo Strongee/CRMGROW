@@ -1667,3 +1667,5 @@ export const CANCEL_ACCOUNT_REASON = [
   'Customer support',
   'Another reason'
 ];
+
+export const CHUNK_SIZE = 15;

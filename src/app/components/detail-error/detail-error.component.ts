@@ -10,7 +10,7 @@ import { ConnectService } from 'src/app/services/connect.service';
   styleUrls: ['./detail-error.component.scss']
 })
 export class DetailErrorComponent implements OnInit {
-  errorCode: string = ''; // 402: Connect Error, 405: Connect Error, 403: Oauth Setting Error, 405: Contacts Detail Error, 406: Connect Error
+  errorCode: string = ''; // 402: Connect Error, 403: Oauth Setting Error, 405: Contacts Detail Error, 406: Connect Error
   errorMessage: string = '';
   loading = false;
   saving = false;

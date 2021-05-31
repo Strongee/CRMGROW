@@ -129,14 +129,19 @@
       </div>
 
       <!-- Text Progressing Status -->
-      <div class="nav-item" *ngIf="textTasks.length">
+      <div class="nav-item" [class.d-none]="!textTasks.length">
         <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showTexts=true" (mouseleave)="showTexts=false">
-          <a class="no-carot d-block position-relative c-pointer">
+          <a class="no-carot d-block position-relative c-pointer" #textProgress>
             <i class="i-icon i-text-schedule bgc-blue d-block texting-icon"></i>
             <span class="badge texting-badge">{{textTasks.length}}</span>
+            <span class="c-track-bar"></span>
+            <span class="c-thumb animate"></span>
+            <svg height="34" width="34" class="c-track">
+              <circle cx="17" cy="17" r="16"></circle>
+            </svg>
           </a>
 
-          <div class="detail-panel" *ngIf="showTexts">
+          <div class="detail-panel" *ngIf="showTexts && textTasks.length">
             <div class="detail-panel-content">
               <div class="panel">
                 <div class="process-item" *ngFor="let task of textTasks">
@@ -163,13 +168,18 @@
       </div>
 
       <!-- Emailing Task Progressing Status -->
-      <div class="nav-item" *ngIf="emailTasks && emailTasks.length">
+      <div class="nav-item" [class.d-none]="!(emailTasks && emailTasks.length)">
         <div class="chat-messages-wrapper detail-wrapper position-relative" ngbDropdown display="dynamic" placement="bottom-right" (mouseover)="showEmails=true" (mouseleave)="showEmails=false">
-          <a class="no-carot d-block position-relative">
+          <a class="no-carot d-block position-relative" style="padding: 1px;" #emailProgress>
             <i class="i-icon i-sent-mail bgc-blue d-block email-sending-icon"></i>
             <span class="badge email-badge">{{emailTasks.length}}</span>
+            <span class="c-track-bar"></span>
+            <span class="c-thumb animate"></span>
+            <svg height="34" width="34" class="c-track">
+              <circle cx="17" cy="17" r="16"></circle>
+            </svg>
           </a>
-          <div class="detail-panel" *ngIf="showEmails">
+          <div class="detail-panel" *ngIf="showEmails && emailTasks && emailTasks.length">
             <ng-container *ngFor="let task of emailTasks">
               <div class="process-item">
                 <div class="email-subject fw-600 f-4 mb-2">

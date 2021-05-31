@@ -80,6 +80,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
     { id: 50, label: '50' }
   ];
 
+  userId = '';
   @ViewChild('drawer') drawer: MatDrawer;
   @ViewChild('editPanel') editPanel: ContactBulkComponent;
   panelType = '';
@@ -121,6 +122,8 @@ export class ContactsComponent implements OnInit, OnDestroy {
       this.isPackageAutomation = res.automation_info?.is_enabled;
       this.isPackageGroupEmail = res.email_info?.mass_enable;
       this.isPackageText = res.text_info?.is_enabled;
+
+      this.userId = res._id;
 
       if (res && res._id && res._id !== '6035a9da27952a3187d07276') {
         this.ACTIONS.some((e, index) => {

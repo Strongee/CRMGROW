@@ -221,7 +221,7 @@ export class DealsService extends HttpService {
   sendEmail(data: any): Observable<any> {
     return this.httpClient.post(this.server + DEAL.SEND_EMAIL, data).pipe(
       map((res) => res),
-      catchError(this.handleError('DEAL SEND EMAIL', []))
+      catchError(this.handleError('DEAL SEND EMAIL', [], true))
     );
   }
 
@@ -340,10 +340,10 @@ export class DealsService extends HttpService {
       );
   }
 
-  sendText(data: any): Observable<boolean> {
+  sendText(data: any): Observable<any> {
     return this.httpClient.post(this.server + DEAL.SEND_TEXT, data).pipe(
-      map((res) => res['status']),
-      catchError(this.handleError('SEND DEAL TEXT', false))
+      map((res) => res),
+      catchError(this.handleError('SEND DEAL TEXT', false, true))
     );
   }
 }

@@ -470,7 +470,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}}" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{activity.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -486,7 +486,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-follow_ups" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-follow_ups" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -618,7 +618,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-notes" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-notes" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -676,7 +676,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}}" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -718,7 +718,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}}" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{activity.type}} {{activity[activity.type]?.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -759,7 +759,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-appointments" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-appointments" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -849,7 +849,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <a class="v-center link-wrapper" [routerLink]="['/deals/' + activity.activity_detail?._id]">
-                      <div class="history-icon mr-3"><i class="act-icon act-deals" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-deals" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -942,7 +942,7 @@
                 <div class="history-detail {{activity.type}}-detail p-3 mt-3">
                   <div class="v-center justify-content-between mb-3">
                     <div class="v-center">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
                       <div class="f-6">
                         <span>{{activity.content}}</span>
                       </div>
@@ -951,15 +951,15 @@
                       <span class="f-3 op-56 ml-auto mr-span">{{activity.created_at | date :'MMM d, hh:mm a'}}</span>
                     </div>
                   </div>
-                  <ng-container *ngIf="activity.activity_detail; else canceledUserTemplate">
+                  <ng-container *ngIf="dataObj.users[activity.users]; else canceledUserTemplate">
                     <div class="main-history-item">
                       <label class="mb-0 op-75 f-3 mt-">Shared With</label>
                       <div class="v-center mt-2">
-                        <img *ngIf="activity.activity_detail.picture_profile; else avatarNameTemplate" [src]="activity.activity_detail.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
+                        <img *ngIf="dataObj.users[activity.users]?.picture_profile; else avatarNameTemplate" [src]="dataObj.users[activity.users]?.picture_profile" onerror="( this.src = './assets/img/user_avatar.svg');" class="form-avatar rounded-circle mr-1" />
                         <ng-template #avatarNameTemplate>
-                          <div class="form-avatar rounded-circle bg-dark mr-1">{{activity.activity_detail.user_name[0]}}</div>
+                          <div class="form-avatar rounded-circle bg-dark mr-1">{{dataObj.users[activity.users]?.user_name[0]}}</div>
                         </ng-template>
-                        <div class="ml-2 font-weight-bold">{{activity.activity_detail.user_name}}</div>
+                        <div class="ml-2 font-weight-bold">{{dataObj.users[activity.users]?.user_name}}</div>
                       </div>
                     </div>
                   </ng-container>
@@ -969,6 +969,9 @@
                 </div>
               </div>
             </ng-container>
+            <!-- <div *ngIf="(activityType.id == 'all') && contact._id">
+              
+            </div> -->
           </ng-container>
 
           <!-- Details Template -->
@@ -978,10 +981,10 @@
                 <ng-container [ngSwitch]="tab.id">
                   <div class="history-detail notes-detail p-3 mt-3" *ngSwitchCase="'note'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-notes"></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-notes"></i></div>
                       <div class="">note</div>
                       <div class="ml-auto f-3 op-56">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
@@ -1029,7 +1032,7 @@
                   </div>
                   <div class="history-detail emails-detail p-3 mt-3" *ngSwitchCase="'email'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{detail.data_type}}"></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{detail.data_type}}"></i></div>
                       <div class="">
                         <ng-container [ngSwitch]="detail.data_type">
                           <span *ngSwitchCase="'emails'">email</span>
@@ -1039,7 +1042,7 @@
                         </ng-container>
                       </div>
                       <div class="ml-auto f-3 op-56 mr-span">
-                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
+                        {{detail.send_time | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
 
@@ -1069,7 +1072,7 @@
 
                   <div class="history-detail texts-detail p-3 mt-3" *ngSwitchCase="'text'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-{{detail.data_type}}"></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-{{detail.data_type}}"></i></div>
                       <div class="">
                         <ng-container [ngSwitch]="detail.data_type">
                           <span *ngSwitchCase="'texts'">text</span>
@@ -1079,7 +1082,7 @@
                         </ng-container>
                       </div>
                       <div class="ml-auto f-3 op-56 mr-span">
-                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
+                        {{detail.send_time | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
 
@@ -1122,10 +1125,10 @@
                        *ngSwitchCase="'appointment'"
                   >
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-appointments"></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-appointments"></i></div>
                       <div class="">appointment</div>
                       <div class="ml-auto f-3 op-56 mr-span">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                     </div>
                     <div class="main-history-item">
@@ -1194,10 +1197,10 @@
 
                   <div class="history-detail follow_ups-detail p-3 mt-3" *ngSwitchCase="'follow_up'">
                     <div class="v-center justify-content-between mb-3">
-                      <div class="history-icon mr-3"><i class="act-icon act-follow_ups"></i></div>
+                      <div class="history-icon mr-1"><i class="act-icon act-follow_ups"></i></div>
                       <div class="">task</div>
                       <div class="ml-auto f-3 op-56">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
@@ -1302,11 +1305,11 @@
                   <div class="history-detail deals-detail p-3 mt-3" *ngSwitchCase="'deal'">
                     <div class="v-center justify-content-between mb-3">
                       <a class="v-center link-wrapper" [routerLink]="['/deals/' + detail._id]">
-                        <div class="history-icon mr-3"><i class="act-icon act-deals"></i></div>
+                        <div class="history-icon mr-1"><i class="act-icon act-deals"></i></div>
                         <div class="">deal</div>
                       </a>
                       <div class="ml-auto f-3 op-56 mr-span">
-                        {{detail.created_at | date :'MMM d, hh:mm a'}}
+                        {{detail.updated_at | date :'MMM d, hh:mm a'}}
                       </div>
                       <!-- <div ngbDropdown class="button-more p-1 rounded" placement="bottom-right">
                         <a class="d-flex c-pointer no-carot" ngbDropdownToggle>
@@ -1457,7 +1460,7 @@
   <div class="history-detail {{activity.type}}-detail p-3 mt-3">
     <div class="v-center justify-content-between mb-3">
       <div class="v-center">
-        <div class="history-icon mr-3"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
+        <div class="history-icon mr-1"><i class="act-icon act-{{activity.type}} {{activity.activity_detail?.type}}" ></i></div>
         <div class="f-6">
           <span>{{activity.content}}</span>
         </div>
@@ -1591,7 +1594,7 @@
   Detail Group Call Activity Panel
   <div class="history-detail group_calls-detail p-3 mt-3 d-none" *ngSwitchCase="'group_call'">
     <div class="v-center justify-content-between mb-3">
-      <div class="history-icon mr-3"><i class="act-icon act-team_calls"></i></div>
+      <div class="history-icon mr-1"><i class="act-icon act-team_calls"></i></div>
       <div class="">group call</div>
       <div class="ml-auto f-3 op-56 mr-span">
         {{detail.created_at | date :'MMM d, hh:mm a'}}

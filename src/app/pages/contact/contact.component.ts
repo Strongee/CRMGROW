@@ -190,7 +190,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     texts: [],
     appointments: [],
     tasks: [],
-    deals: []
+    deals: [],
+    users: []
   };
   dataObj = {
     materials: {},
@@ -199,7 +200,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     texts: {},
     appointments: {},
     tasks: {},
-    deals: {}
+    deals: {},
+    users: {}
   };
   materialMediaSending = {}; // video_send_activity: email_id || text_id
   materialSendingType = {}; // material_send_activity: media_type
@@ -363,6 +365,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.data.appointments = [];
       this.data.tasks = [];
       this.data.deals = [];
+      this.data.users = [];
       this.dataObj.materials = {};
       this.dataObj.notes = {};
       this.dataObj.emails = {};
@@ -370,6 +373,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.dataObj.appointments = {};
       this.dataObj.tasks = {};
       this.dataObj.deals = {};
+      this.dataObj.users = {};
 
       if (contact._id && contact.details) {
         this.data.materials = contact.details.materials || [];
@@ -379,6 +383,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.data.appointments = contact.details.appointments || [];
         this.data.tasks = contact.details.tasks || [];
         this.data.deals = contact.details.deals || [];
+        this.data.users = contact.details.users || [];
 
         this.materialMediaSending = {};
         this.materialSendingType = {};
@@ -646,6 +651,16 @@ export class ContactComponent implements OnInit, OnDestroy {
           group: activity._id,
           media,
           material: activity[activity.type]
+        };
+      case 'users':
+        return {
+          type: 'users',
+          group: activity.users
+        };
+      case 'contacts':
+        return {
+          type: 'contacts',
+          group: activity.contacts
         };
     }
     // if (!activity.activity_detail) {
@@ -1072,18 +1087,42 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.showingDetails = [];
       if (tab.id === 'note') {
         this.showingDetails = [...this.data.notes];
+        this.showingDetails.sort((a, b) => {
+          if (new Date(a.updated_at + '') < new Date(b.updated_at + '')) {
+            return 1;
+          }
+          return -1;
+        });
         return;
       }
       if (tab.id === 'appointment') {
         this.showingDetails = [...this.data.appointments];
+        this.showingDetails.sort((a, b) => {
+          if (new Date(a.updated_at + '') < new Date(b.updated_at + '')) {
+            return 1;
+          }
+          return -1;
+        });
         return;
       }
       if (tab.id === 'follow_up') {
         this.showingDetails = [...this.data.tasks];
+        this.showingDetails.sort((a, b) => {
+          if (new Date(a.updated_at + '') < new Date(b.updated_at + '')) {
+            return 1;
+          }
+          return -1;
+        });
         return;
       }
       if (tab.id === 'deal') {
         this.showingDetails = [...this.data.deals];
+        this.showingDetails.sort((a, b) => {
+          if (new Date(a.updated_at + '') < new Date(b.updated_at + '')) {
+            return 1;
+          }
+          return -1;
+        });
         return;
       }
       if (tab.id === 'email') {
