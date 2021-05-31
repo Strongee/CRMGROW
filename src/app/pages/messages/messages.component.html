@@ -266,7 +266,7 @@
         </div>
 
         <div class="file-list-wrapper">
-            <div class="file-list" [class.active]="panel === PanelView.Files">
+            <div class="file-list position-relative" [class.active]="panel === PanelView.Files">
                 <div class="v-center p-3 file-list-header">
                     <div class="f-5 fw-600 ml-auto">Files</div>
                     <button type="button" class="v-center border-0 bgc-trans ml-auto" (click)="panel = PanelView.Messages">
@@ -274,6 +274,9 @@
                     </button>
                 </div>
                 <div class="p-3 files">
+                    <ng-container *ngIf="loadingFiles && fileDetails[selectedContact._id]">
+                        <div class="updating-status">Updating</div>
+                    </ng-container>
                     <ng-container *ngIf="loadingFiles && !fileDetails[selectedContact._id]; else filesList">
                         <div class="loader"></div>
                     </ng-container>

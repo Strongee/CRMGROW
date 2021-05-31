@@ -135,6 +135,7 @@
   text-align: center;
   background-color: red;
   color: white;
+  z-index: 2;
 }
 .email-sending-icon {
   width: 20px;
@@ -146,6 +147,7 @@
 
   & ~ .texting-badge {
     top: -4px;
+    z-index: 2;
   }
 }
 .detail-panel {
@@ -529,4 +531,59 @@
       display: none;
     }
   }
+}
+
+.c-track-bar {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #eee;
+  border-radius: 50%;
+  top: -6px;
+  left: -6px;
+  z-index: 0;
+}
+.c-thumb {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  top: -6px;
+  left: -6px;
+  z-index: 3;
+
+  &.animate {
+    animation-name: spinnerEffect;
+    animation-duration: 60s;
+    animation-iteration-count: infinite;
+    animation-delay: 0s;
+  }
+
+  &::after {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    display: block;
+    background: #d2d2ff;
+    border-radius: 3px;
+    top: -2px;
+    left: 15px;
+    content: '';
+  }
+}
+.c-track{
+  fill: transparent;
+  stroke: #3639ff;
+  stroke-width: 2;
+  stroke-dasharray: 250;
+  stroke-dashoffset: -250;
+  animation: rotate 5s linear infinite;
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  top: -6px;
+  left: -6px;
+  transform: rotate(-90deg);
+  z-index: 1;
 }

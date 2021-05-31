@@ -494,6 +494,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
             };
           });
         }
+        if (this.panel === this.PanelView.Files) {
+          this.loadFiles();
+        }
         this.message = '';
       }
     });

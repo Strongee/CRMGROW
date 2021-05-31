@@ -120,17 +120,17 @@
             <span>{{activity.content}}</span>
             <ng-container *ngIf="activity.type === 'video_trackers'">
               <div class="mat-thumb" (click)="openDetail(activity.video_trackers?.video, $event)">
-                <img src="{{_materials[activity.video_trackers?.video].preview}}"/>
+                <img src="{{_materials[activity.video_trackers?.video]?.preview}}"/>
               </div>
             </ng-container>
             <ng-container *ngIf="activity.type === 'pdf_trackers'">
               <div class="mat-thumb" (click)="openDetail(activity.pdf_trackers?.pdf, $event)">
-                <img src="{{_materials[activity.pdf_trackers?.pdf].preview}}"/>
+                <img src="{{_materials[activity.pdf_trackers?.pdf]?.preview}}"/>
               </div>
             </ng-container>
             <ng-container *ngIf="activity.type === 'image_trackers'">
               <div class="mat-thumb" (click)="openDetail(activity.image_trackers?.image, $event)">
-                <img src="{{_materials[activity.image_trackers?.image].preview}}"/>
+                <img src="{{_materials[activity.image_trackers?.image]?.preview}}"/>
               </div>
             </ng-container>
             <span class="time f-3 ml-auto op-56">

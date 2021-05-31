@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api: 'https://stg-api.crmgrow.com/api/',
+  api: 'https://ecsbe.crmgrow.com/api/',
   server: 'https://ecsbe.crmgrow.com',
   website: 'https://ecsbe.crmgrow.com',
   front: 'https://app-v2.crmgrow.com',

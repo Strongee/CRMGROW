@@ -25,6 +25,8 @@ import { ConnectService } from 'src/app/services/connect.service';
 import { Garbage } from 'src/app/models/garbage.model';
 import { Subscription } from 'rxjs';
 import { isEmptyHtml } from 'src/app/utils/functions';
+import { CHUNK_SIZE } from 'src/app/constants/variable.constants';
+import { HandlerService } from 'src/app/services/handler.service';
 
 @Component({
   selector: 'app-material-send',
@@ -63,6 +65,7 @@ export class MaterialSendComponent implements OnInit {
     private materialService: MaterialService,
     public templateService: TemplatesService,
     private toast: ToastrService,
+    private handlerService: HandlerService,
     private _viewContainerRef: ViewContainerRef,
     private overlay: Overlay,
     private cdr: ChangeDetectorRef,
@@ -355,10 +358,62 @@ export class MaterialSendComponent implements OnInit {
       .sendMaterials({
         ...data
       })
-      .subscribe((status) => {
+      .subscribe((res) => {
         this.sending = false;
-        if (status) {
-          this.toast.success('Materials has been successfully sent.');
+        if (res['status']) {
+          if (res['message'] === 'all_queue') {
+            // toastr display, call status setting update
+            this.toast.info(
+              'Your material sending requests are queued. The queue progressing would be displayed in the header.',
+              'Material Queue'
+            );
+          } else {
+            if (contacts.length > CHUNK_SIZE) {
+              this.toast.success(
+                `Sending to ${CHUNK_SIZE} contacts are sent successfully. ${
+                  contacts.length - CHUNK_SIZE
+                } request are queued. The queue progressing would be displayed in the header.`,
+                'Material Sent'
+              );
+            } else {
+              // toastr display
+              this.toast.success(
+                'Your materials are sent successfully.',
+                'Material Sent'
+              );
+            }
+          }
+        } else if (res.statusCode === 405) {
+          let failed = res.error && res.error.length;
+          failed += res.notExecuted && res.notExecuted.length;
+          if (failed < contacts.length) {
+            let message = '';
+            if (contacts.length > CHUNK_SIZE) {
+              if (failed < CHUNK_SIZE) {
+                message = `Sending to ${failed} contacts are failed. But ${
+                  CHUNK_SIZE - failed
+                } are succeed. Rest requests are queued. The queue progressing would be displayed in the header.`;
+              } else {
+                message = `Sending to ${failed} contacts are failed. Rest requests are queued. The queue progressing would be displayed in the header.`;
+              }
+            } else {
+              // call status setting update && toast display
+              message = `Sending to ${failed} contacts are failed. ${
+                CHUNK_SIZE - failed
+              } are succeed.`;
+            }
+            this.toast.warning(message, 'Material Sent');
+          }
+        }
+        const length =
+          (data.video_ids ? data.video_ids.length : 0) +
+          (data.pdf_ids ? data.pdf_ids.length : 0) +
+          (data.image_ids ? data.image_ids.length : 0) +
+          1;
+        if (contacts.length > CHUNK_SIZE) {
+          this.handlerService.updateQueueTasks();
+        }
+        if (res['status']) {
           this.dialogRef.close();
         }
       });

@@ -22,7 +22,6 @@ import { TeamService } from './team.service';
 import { TemplatesService } from './templates.service';
 import { ThemeService } from './theme.service';
 import { UserService } from './user.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -34,6 +33,8 @@ export class HandlerService {
   openSearch$ = this.openSearch.asObservable();
   previousUrl: string = '';
   currentUrl: string = '';
+  updaterTime: BehaviorSubject<any> = new BehaviorSubject(new Date());
+  updaterTime$ = this.updaterTime.asObservable();
 
   constructor(
     private storeService: StoreService,
@@ -65,6 +66,10 @@ export class HandlerService {
           this.openSearch.next(false);
         }
       });
+  }
+
+  updateQueueTasks(): void {
+    this.updaterTime.next(new Date());
   }
 
   /**
